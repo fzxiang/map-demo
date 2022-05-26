@@ -1,21 +1,20 @@
 <template>
   <div class="wrapper">
-    <div class="container">
-      <svg class="chart">
-      </svg>
-    </div>
+    <div class="container" ref="container"></div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 import render from '../mapD3/render'
 
+const container = ref(null)
 onMounted(async () => {
-  const res = await fetch('https://geo.datav.aliyun.com/areas_v2/bound/100000_full.json')
+  const res = await fetch('/api/map')
+  console.log(res)
   const geoJson = await res.json()
-  render('.chart', geoJson)
+  render(container.value, geoJson.result)
 })
 
 

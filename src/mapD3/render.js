@@ -1,20 +1,18 @@
 import * as d3 from 'd3'
 
-export default function (className, geoJson) {
+export default function (elem, geoJson) {
 	/**
 	 * 基本配置
 	 */
-	const svgWidth = 961;
-	const svgHeight = 961;
-	const padding = 30;
 
-	const svg = d3.select(className)
-		.attr("height", svgHeight)
-		.attr("width", svgWidth);
+	const svg = d3.create('svg')
+	const svgWidth = elem.offsetWidth;
+	const svgHeight = elem.offsetHeight;
+	const padding = 30;
+	svg.attr("height", svgHeight)
+	svg.attr("width", svgWidth);
 
 	const mapContainer = svg.append("g")
-	.attr("fill", "#444")
-	.attr("cursor", "pointer"); //添加mapContainer装载地图绘制内容
 
 	/**
 	 * 获取投影，并配置
@@ -43,7 +41,9 @@ export default function (className, geoJson) {
 		.attr("d", pathGenerator) //绘制path
 		.attr("stroke-width", 0.5)
 		.attr("stroke", "#000000")
-		.attr("fill", "#ffffff");
+		.attr("fill", "#444")
+		.attr("cursor", "pointer"); //添加mapContainer装载地图绘制内容
+
 
 	function zoomed() {
 		const t = d3.event.transform;
@@ -54,4 +54,6 @@ export default function (className, geoJson) {
 		.on("zoom", zoomed);  //设置监听事件
 
 	svg.call(zoom); //仍然应用于svg上，但是事件触发时改变的是
+
+	elem.appendChild(svg.node())
 }
