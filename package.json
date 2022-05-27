@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "d3": "5.9.2",
+    "geojson": "^0.5.0",
+    "jquery": "^3.6.0",
     "vue": "^3.2.25"
   },
   "devDependencies": {

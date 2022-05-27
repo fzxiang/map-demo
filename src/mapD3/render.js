@@ -41,7 +41,7 @@ export default function (elem, geoJson) {
 		.attr("d", pathGenerator) //绘制path
 		.attr("stroke-width", 0.5)
 		.attr("stroke", "#000000")
-		.attr("fill", "#444")
+		.attr("fill", "#ccc")
 		.attr("cursor", "pointer"); //添加mapContainer装载地图绘制内容
 
 
@@ -50,7 +50,7 @@ export default function (elem, geoJson) {
 		mapContainer.attr("transform", `translate(${t.x}, ${t.y}) scale(${t.k})`); //改变mapContainer的位置及缩放
 	}
 	const zoom = d3.zoom()
-		.scaleExtent([1, 3])  //设置监听范围
+		.scaleExtent([1, 5])  //设置监听范围
 		.on("zoom", zoomed);  //设置监听事件
 
 	svg.call(zoom); //仍然应用于svg上，但是事件触发时改变的是
