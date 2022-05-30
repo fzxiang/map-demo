@@ -18,29 +18,19 @@ onMounted(async () => {
   const param = {
     "do": "getMapList",
     "data": {
-      "startPosX": 718, // 起始x坐标
-      "startPosY": 469, // 起始y坐标
-      "lengthX": 1, // 范围x坐标
-      "lengthY": 1, // 范围y坐标
-      "uId":10001033763, // ⾮必填
-      "guildId": 7 // ⾮必填
+      "startPosX": 150, // 起始x坐标
+      "startPosY": 150, // 起始y坐标
+      "lengthX": 3, // 范围x坐标
+      "lengthY": 3, // 范围y坐标
+      // "uId":10001033763, // ⾮必填
+      // "guildId": 7 // ⾮必填
     }
   }
   const res = await ajax({
     // url: '/map/api',
     url: '/api/map',
     method: 'post',
-    data: {
-      "do": "getMapList",
-      "data": {
-        "startPosX": 150, // 起始x坐标
-        "startPosY": 140, // 起始y坐标
-        "lengthX": 40, // 范围x坐标
-        "lengthY": 40, // 范围y坐标
-        // "uId": 10001033763, // ⾮必填
-        // "guildId": 7 // ⾮必填
-      },
-    }
+    data: param
   })
   console.log(res)
 
@@ -68,8 +58,11 @@ onMounted(async () => {
 
 .container {
   display: flex;
-  height: 100%;
+  width: 60%;
+  height: 60%;
+  border: 1px solid #ccc;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 </style>

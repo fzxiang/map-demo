@@ -1,10 +1,15 @@
 import * as d3 from 'd3'
 
+window.d3 = d3
+// 配置单元格宽度
+const RECT_WIDTH = 40
+
 export default function (elem, geoJson) {
 	/**
 	 * 基本配置
 	 */
 
+	console.log(geoJson)
 	const svg = d3.create('svg')
 	const svgWidth = elem.offsetWidth;
 	const svgHeight = elem.offsetHeight;
@@ -14,46 +19,31 @@ export default function (elem, geoJson) {
 
 	const mapContainer = svg.append("g")
 
-	/**
-	 * 获取投影，并配置
-	 */
-	const x0 = padding;
-	const y0 = padding;
-	const x1 = svgWidth - padding * 2;
-	const y1 = svgHeight - padding * 2;
-	const projection = d3.geoMercator().fitExtent(
-		[
-			[x0, y0], //左上角坐标
-			[x1, y1], //右下角坐标
-		], geoJson);
+	const shapes = mapContainer.selectAll(".shapes").data(geoJson).enter()
 
-	/**
-	 * 获取geographic path generator，并配置
-	 */
-	const pathGenerator = d3.geoPath().projection(projection);
+	const len = Math.sqrt(geoJson.length)
+	shapes.append("rect")
+		// 坐标根据单元格宽度重新计算
+		.attr("x", (d, i) => {
+			return ~~(i / len) * RECT_WIDTH + d.pos[0];
 
-	/**
-	 * 利用pathGenerator与features生成path路径，绘制地图
-	 */
-	const mapPath = mapContainer.selectAll("path")
-		.data(geoJson.features) //数据绑定
-		.join("path")
-		.attr("d", pathGenerator) //绘制path
-		.attr("stroke-width", 0.5)
-		.attr("stroke", "#000000")
-		.attr("fill", "#ccc")
-		.attr("cursor", "pointer"); //添加mapContainer装载地图绘制内容
-
+		})
+		.attr("y", (d, i) => {
+			return (i - ~~(i/len)*len) * RECT_WIDTH + d.pos[1];
+		})
+		.attr("width", RECT_WIDTH)
+		.attr("height", RECT_WIDTH);
 
 	function zoomed() {
 		const t = d3.event.transform;
-		mapContainer.attr("transform", `translate(${t.x}, ${t.y}) scale(${t.k})`); //改变mapContainer的位置及缩放
+		svg.attr("transform", `translate(${t.x}, ${t.y}) scale(${t.k})`); //改变mapContainer的位置及缩放
 	}
+
 	const zoom = d3.zoom()
 		.scaleExtent([1, 5])  //设置监听范围
 		.on("zoom", zoomed);  //设置监听事件
 
-	svg.call(zoom); //仍然应用于svg上，但是事件触发时改变的是
+	// svg.call(zoom); //仍然应用于svg上，但是事件触发时改变的是
 
 	elem.appendChild(svg.node())
 }
