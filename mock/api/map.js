@@ -43,6 +43,38 @@ export default [{
 	timeout: 1000,
 	method: 'post',
 	response: () => {
-		return resultSuccess(json);
+		// return resultSuccess(json);
+		return resultSuccess([
+			{
+				"pos": [
+					151,
+					151
+				],
+				"rect": {
+					w: 3,
+					h: 3
+				},
+				"center_pos": -1,
+				"type": 2,
+				"owner": "",
+				"name": "",
+				"icon": 0,
+				"level": 2,
+				"colour_type": 0
+			},
+			{
+				"pos": [
+					155,
+					155
+				],
+				"center_pos": -1,
+				"type": 2,
+				"owner": "",
+				"name": "",
+				"icon": 0,
+				"level": 2,
+				"colour_type": 0
+			},
+		])
 	},
 },]
