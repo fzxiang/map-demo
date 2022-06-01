@@ -20,6 +20,14 @@ export default ({ command }) => {
       proxy: createProxy(VITE_PROXY),
     },
     plugins: createVitePlugins(viteEnv, isBuild),
+		css: {
+			preprocessorOptions: {
+				less: {
+					// modifyVars: generateModifyVars(),
+					// javascriptEnabled: true,
+				},
+			},
+		},
   })
 
 }

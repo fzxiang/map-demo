@@ -32,12 +32,12 @@ onMounted(async () => {
   geoLayerRef.value = geoLayer
 })
 
-// setTimeout(async ()=>{
-//   param.data.startPosX = 10;
-//   param.data.startPosY = 0
-//   const geoJson = await getMapApi(param)
-//   geoLayerRef.value.addData(geoJson)
-// }, 3000)
+setTimeout(async ()=>{
+  param.data.startPosX = 10;
+  param.data.startPosY = 0
+  const geoJson = await getMapApi(param)
+  geoLayerRef.value.addData(geoJson)
+}, 3000)
 
 
 async function getMapApi(param) {

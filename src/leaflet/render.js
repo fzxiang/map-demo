@@ -17,8 +17,12 @@ export default function (elem, geoJson) {
 
 	// 信息层
 	const info = useInfoLayer(L)
-
 	info.addTo(map)
+
+	// 搜索层
+	// const searchCtrl = L.control().fuseSearch()
+	// searchCtrl.addTo(map)
+	console.log(L.control)
 
 	const geoLayer = L.geoJSON(geoJson, {
 		style: (data) => {
