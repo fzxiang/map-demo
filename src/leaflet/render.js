@@ -20,7 +20,7 @@ export default function (elem, geoJson) {
 	const info = useInfoLayer(L)
 	info.addTo(map)
 
-	// geo层
+	// GEO层
 	const geoLayer = L.geoJSON(geoJson, {
 		style: (data) => {
 			return {
@@ -45,11 +45,9 @@ export default function (elem, geoJson) {
 		}
 	}).addTo(map);
 
-
 	// 搜索层
 	const controlSearch = useSearchLayer(geoLayer)
 	map.addControl(controlSearch)
-
 
 	function highlightFeature(e) {
 		var layer = e.target;

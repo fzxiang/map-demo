@@ -1,7 +1,7 @@
 // 信息层
 import useConfig from "./useConfig";
 
-const { COLOR, TYPE } = useConfig()
+const { TYPE } = useConfig()
 
 export default function (L) {
 	const info = L.control()
