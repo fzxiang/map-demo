@@ -1,8 +1,7 @@
 import * as L from 'leaflet'
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
-
-const { COLOR } = useConfig()
+import useSearchLayer from "./useSearchLayer";
 
 
 export default function (elem, geoJson) {
@@ -15,20 +14,18 @@ export default function (elem, geoJson) {
 		.setMaxZoom(7)
 		.setMinZoom(4)
 
+	const { COLOR } = useConfig()
+
 	// 信息层
 	const info = useInfoLayer(L)
 	info.addTo(map)
 
-	// 搜索层
-	// const searchCtrl = L.control().fuseSearch()
-	// searchCtrl.addTo(map)
-	console.log(L.control)
-
+	// geo层
 	const geoLayer = L.geoJSON(geoJson, {
 		style: (data) => {
 			return {
 				color: COLOR[data.properties.type],
-				dashArray: '5',
+				// dashArray: '5',
 				weight: 2,
 			};
 		},
@@ -48,6 +45,12 @@ export default function (elem, geoJson) {
 		}
 	}).addTo(map);
 
+
+	// 搜索层
+	const controlSearch = useSearchLayer(geoLayer)
+	map.addControl(controlSearch)
+
+
 	function highlightFeature(e) {
 		var layer = e.target;
 
@@ -55,7 +58,6 @@ export default function (elem, geoJson) {
 			weight: 3,
 			opacity: .3,
 			color: '#00609a',
-			dashArray: '',
 			// fillOpacity: 0.7
 		});
 
