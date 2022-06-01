@@ -7,7 +7,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import render from '../mapD3/leaflet'
+import render from '../leaflet/render'
 
 import { ajax } from 'jquery'
 import GeoJSON from "geojson";
