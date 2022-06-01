@@ -10,38 +10,35 @@ import { onMounted, ref } from "vue";
 import render from '../mapD3/leaflet'
 
 import { ajax } from 'jquery'
+import GeoJSON from "geojson";
+import { pos2polygon } from "../utils/datafilter";
 
 onMounted(async () => {
   const param = {
     "do": "getMapList",
     "data": {
-      "startPosX": 150, // 起始x坐标
-      "startPosY": 150, // 起始y坐标
-      "lengthX": 3, // 范围x坐标
-      "lengthY": 3, // 范围y坐标
+      "startPosX": 0, // 起始x坐标
+      "startPosY": 0, // 起始y坐标
+      "lengthX": 10, // 范围x坐标
+      "lengthY": 10, // 范围y坐标
       // "uId":10001033763, // ⾮必填
       // "guildId": 7 // ⾮必填
     }
   }
   const res = await ajax({
-    // url: '/map/api',
-    url: '/api/map',
+    url: '/map/api',
+    // url: '/api/map',
     method: 'post',
     data: param
   })
-  console.log(res)
-  res.result.forEach(item => {
-    const width = item.rect ? item.rect.w : 1
-    const height = item.rect ? item.rect.h : 1
-    const [x, y] = item.pos
-    item.Polygon = [
-      [ [-1, -1], [0, -1], [0, 0], [-1, 0], [-1, -1] ],
-      [ [0, 0], [1, 0], [1, 1], [0, 1], [0, 0] ],
-      [ [1, 1], [2, 1], [2, 2], [1, 2], [1, 1] ],
-    ]
+
+  const json = pos2polygon(res.result)
+
+  const geoJson = GeoJSON.parse(json, {
+    Polygon: 'Polygon'
   })
 
-  const geoJson = res.result
+  console.log(geoJson)
   render('map_id', geoJson)
 
 })

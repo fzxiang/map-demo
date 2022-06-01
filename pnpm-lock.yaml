@@ -6,6 +6,7 @@ specifiers:
   geojson: ^0.5.0
   jquery: ^3.6.0
   leaflet: ^1.8.0
+  lodash.get: ^4.4.2
   mockjs: ^1.1.0
   rollup: ^2.74.1
   vite: ^2.9.9
@@ -17,6 +18,7 @@ dependencies:
   geojson: registry.npmmirror.com/geojson/0.5.0
   jquery: registry.npmmirror.com/jquery/3.6.0
   leaflet: registry.npmmirror.com/leaflet/1.8.0
+  lodash.get: registry.npmmirror.com/lodash.get/4.4.2
   vue: registry.npmmirror.com/vue/3.2.34
 
 devDependencies:
@@ -1126,6 +1128,12 @@ packages:
     resolution: {integrity: sha512-gwhMjFCQiYs3x/Sf+d49f10ERXaEFCPr+nVTryhAW8DWbMGqJqt9G4XuIaHmFW08zYvhgdzqXGr8AlW8v8dQkA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/leaflet/-/leaflet-1.8.0.tgz}
     name: leaflet
     version: 1.8.0
+    dev: false
+
+  registry.npmmirror.com/lodash.get/4.4.2:
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.get/-/lodash.get-4.4.2.tgz}
+    name: lodash.get
+    version: 4.4.2
     dev: false
 
   registry.npmmirror.com/magic-string/0.25.9:

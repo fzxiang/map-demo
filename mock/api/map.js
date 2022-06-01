@@ -47,8 +47,8 @@ export default [{
 		return resultSuccess([
 			{
 				"pos": [
-					151,
-					151
+					150,
+					150
 				],
 				"rect": {
 					w: 3,
@@ -62,19 +62,23 @@ export default [{
 				"level": 2,
 				"colour_type": 0
 			},
-			{
-				"pos": [
-					155,
-					155
-				],
-				"center_pos": -1,
-				"type": 2,
-				"owner": "",
-				"name": "",
-				"icon": 0,
-				"level": 2,
-				"colour_type": 0
-			},
+			// {
+			// 	"pos": [
+			// 		160,
+			// 		160
+			// 	],
+			// 	"rect": {
+			// 		w: 3,
+			// 		h: 3
+			// 	},
+			// 	"center_pos": -1,
+			// 	"type": 2,
+			// 	"owner": "",
+			// 	"name": "",
+			// 	"icon": 0,
+			// 	"level": 2,
+			// 	"colour_type": 0
+			// },
 		])
 	},
 },]

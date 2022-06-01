@@ -1,51 +1,39 @@
 import * as L from 'leaflet'
-import GeoJSON from 'geojson'
 
+const COLOR = {
+	0: 'rgb(0,0,0)',
+	1: 'rgb(241,229,187)',
+	2: 'rgb(140,194,136)',
+	3: 'rgb(230,131,63)'
+}
 
-// 配置单元格宽度
-const RECT_WIDTH = 40
+const TYPE = {
+	0: '阻挡点',
+	1: '地块类型-城池',
+	2: '地块类型-资源点',
+	3: '地块类型-玩家主城',
+
+}
 
 export default function (id, geoJson) {
+
+	const bounds = [[0,0], [1000,1000]];
+
 	const map = L
-		.map(id)
-		// .setView([39.74739, -105], 13)
-		.setView([0, 0], 6);
+		.map(id, {
+			preferCanvas: true,
+			crs: L.CRS.Simple, // 简单坐标系
+		})
+		.setView([5, 5], 6)
+		.setMaxZoom(7)
+		.setMinZoom(5)
 
-	// const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	// 	maxZoom: 19,
-	// 	attribution: ''
-	// }).addTo(map);
-
-
-	console.log(geoJson)
-	geoJson.forEach(item => {
-		item.Polygon = [
-			[ [-1, -1], [0, -1], [0, 0], [-1, 0], [-1, -1] ],
-			[ [0, 0], [1, 0], [1, 1], [0, 1], [0, 0] ],
-			[ [1, 1], [2, 1], [2, 2], [1, 2], [1, 1] ],
-		]
-	})
-	var other = GeoJSON.parse(geoJson, { Polygon: 'Polygon' })
-
-	function onEachFeature(feature, layer) {
-		let popupContent = '<p>I started out as a GeoJSON ' +
-			feature.geometry.type + ', but now I\'m a Leaflet vector!</p>';
-
-		if (feature.properties && feature.properties.popupContent) {
-			popupContent += feature.properties.popupContent;
-		}
-
-		layer.bindPopup(popupContent);
-	}
-
-	var freeBus = [
-		{ ...GeoJSON.parse(geoJson, { Polygon: 'Polygon' }) },
-	];
-
-	/* global campus, bicycleRental, freeBus, coorsField */
-
-	var freeBusLayer = L.geoJSON(freeBus, {
-
+	const geoLayer = L.geoJSON(geoJson, {
+		style: function (data) {
+			return {
+				color: COLOR[data.properties.type]
+			};
+		},
 		filter: function (feature, layer) {
 			if (feature.properties) {
 				// If the property "underConstruction" exists and is true, return false (don't render features under construction)
@@ -57,14 +45,27 @@ export default function (id, geoJson) {
 		onEachFeature: onEachFeature
 	}).addTo(map);
 
-	// const coorsLayer = L.geoJSON(coorsField, {
-	//
-	// 	pointToLayer: function (feature, latlng) {
-	// 		return L.marker(latlng, { icon: baseballIcon });
-	// 	},
-	//
-	// 	onEachFeature: onEachFeature
-	// }).addTo(map);
+	console.log(geoLayer)
 
+}
 
+function onEachFeature(data, layer) {
+	const {
+		pos,
+		level,
+		name,
+		owner,
+		type,
+	} = data.properties
+	let str = `<div>${TYPE[type]}</div><div>位置信息: ${pos[0]},${pos[1]} </div>`
+	if (name) {
+		str += `<div>名称：${name}</div>`
+	}
+	if (owner) {
+		str += `<div>拥有者：${owner}</div>`
+	}
+	if (level) {
+		str += `<div>等级：${name}</div>`
+	}
+	layer.bindPopup(str);
 }
