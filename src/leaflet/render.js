@@ -2,7 +2,10 @@ import * as L from 'leaflet'
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useSearchLayer from "./useSearchLayer";
+import useLocationLayer from "./useLocationLayer";
+import { watch } from "vue";
 
+const { COLOR, TILE_NUM } = useConfig()
 
 export default function (elem, geoJson) {
 	const map = L
@@ -10,23 +13,23 @@ export default function (elem, geoJson) {
 			preferCanvas: true,
 			crs: L.CRS.Simple, // 简单坐标系
 		})
-		.setView([5, 5], 6)
+		.setView([TILE_NUM/2, TILE_NUM/2], 6)
 		.setMaxZoom(7)
 		.setMinZoom(4)
 
-	const { COLOR } = useConfig()
 
 	// 信息层
-	const info = useInfoLayer(L)
+	const info = useInfoLayer()
 	info.addTo(map)
 
 	// GEO层
 	const geoLayer = L.geoJSON(geoJson, {
 		style: (data) => {
 			return {
-				color: COLOR[data.properties.type],
+				fillColor: COLOR[data.properties.type],
 				// dashArray: '5',
 				weight: 2,
+				color: 'white'
 			};
 		},
 		filter: (feature, layer) => {
@@ -49,14 +52,23 @@ export default function (elem, geoJson) {
 	const controlSearch = useSearchLayer(geoLayer)
 	map.addControl(controlSearch)
 
+	// 跳转层
+	const [locationLayer, latlng] = useLocationLayer()
+	locationLayer.addTo(map)
+
+	watch(latlng, (newVal) => {
+		map.setView(latlng, 5)
+	})
+
 	function highlightFeature(e) {
 		var layer = e.target;
 
 		layer.setStyle({
-			weight: 3,
-			opacity: .3,
-			color: '#00609a',
-			// fillOpacity: 0.7
+			weight: 4,
+			opacity: 1,
+			color: '#f8be00',
+			fillColor: '#f8be00',
+			fillOpacity: .6
 		});
 
 		if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {

@@ -1,4 +1,5 @@
 .location-layer {
+  display: flex;
   padding: 6px 8px;
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
@@ -9,4 +10,12 @@
 
 .location-layer:empty {
   display: none;
+}
+
+.location-layer .form-item > div{
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+.location-layer .form-item > div:last-child{
+  margin-bottom: 0;
 }

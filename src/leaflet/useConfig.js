@@ -10,7 +10,8 @@ const config =  {
 		1: '地块类型-城池',
 		2: '地块类型-资源点',
 		3: '地块类型-玩家主城',
-	}
+	},
+	TILE_NUM: 40
 }
 export default function useConfig() {
 	return config

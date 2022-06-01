@@ -8,10 +8,12 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import render from '../leaflet/render'
+import useConfig from '../leaflet/useConfig'
 
 import { ajax } from 'jquery'
 import GeoJSON from "geojson";
 import { pos2polygon } from "../utils/datafilter";
+const { TILE_NUM } = useConfig()
 
 const geoLayerRef = ref(null)
 const containerRef = ref(null)
@@ -20,8 +22,8 @@ const param = {
   "data": {
     "startPosX": 0, // 起始x坐标
     "startPosY": 0, // 起始y坐标
-    "lengthX": 10, // 范围x坐标
-    "lengthY": 10, // 范围y坐标
+    "lengthX": TILE_NUM, // 范围x坐标
+    "lengthY": TILE_NUM, // 范围y坐标
     // "uId":10001033763, // ⾮必填
     // "guildId": 7 // ⾮必填
   }
@@ -33,7 +35,7 @@ onMounted(async () => {
 })
 
 setTimeout(async ()=>{
-  param.data.startPosX = 10;
+  param.data.startPosX = TILE_NUM;
   param.data.startPosY = 0
   const geoJson = await getMapApi(param)
   geoLayerRef.value.addData(geoJson)

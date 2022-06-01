@@ -1,9 +1,10 @@
 // 信息层
+import * as L from "leaflet";
 import useConfig from "./useConfig";
 
 const { TYPE } = useConfig()
 
-export default function (L) {
+export default function () {
 	const info = L.control()
 
 	info.onAdd = function (map) {
