@@ -19,7 +19,7 @@ const options = {
 	filter: (feature, layer) => {
 		if (feature.properties) {
 			// If the property "underConstruction" exists and is true, return false (don't render features under construction)
-			return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+			return feature.properties.type !== 2;
 		}
 		return false;
 	},

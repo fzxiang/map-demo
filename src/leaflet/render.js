@@ -1,23 +1,18 @@
 import * as L from 'leaflet'
-import { watch } from "vue";
+import { toRefs, watch } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useSearchLayer from "./useSearchLayer";
 import useLocationLayer from "./useLocationLayer";
 import useGeoLayer from "./useGeoLayer";
+import userMapLayer from "./useMapLayer";
 
-const { TILE_NUM } = useConfig()
+
 
 export default function (elem, geoJSON) {
-	const map = L
-		.map(elem, {
-			preferCanvas: true,
-			crs: L.CRS.Simple, // 简单坐标系
-		})
-		.setView([TILE_NUM/2, TILE_NUM/2], 6)
-		.setMaxZoom(7)
-		.setMinZoom(4)
-
+	const [mapRef, mapRender] = userMapLayer()
+	mapRender(elem)
+	const map = mapRef.value
 
 	// 信息层
 	const [info] = useInfoLayer()
@@ -34,14 +29,14 @@ export default function (elem, geoJSON) {
 	map.addControl(controlSearch)
 
 	// 跳转层
-	const [locationLayer, latlng] = useLocationLayer()
+	const [locationLayer] = useLocationLayer()
 	locationLayer.addTo(map)
 
-	watch(latlng, (newVal) => {
-		map.setView(latlng, 5)
-	})
-
-
+	// watch(pos, () => {
+	// 	const latlng = L.latLng(pos[0], pos[1])
+	// 	console.log(latlng)
+	// 	map.setView(latlng, 5)
+	// })
 
 	return {
 		geoLayer,

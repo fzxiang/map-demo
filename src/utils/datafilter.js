@@ -6,15 +6,15 @@ import get from 'lodash.get'
 // 位置点 -> 打点坐标
 export function pos2polygon(data, options = {}) {
 	const {
-		_w = 'rect.w',
-		_h = 'rect.h',
+		_w = 'shape[0]',
+		_h = 'shape[1]',
 		_x = 'pos[0]',
 		_y = 'pos[1]',
 		direction = 'left-bottom',
 	} = options
 	data.forEach(item => {
-		const w = item.rect ? get(item, _w) : 1
-		const h = item.rect ? get(item, _h) : 1
+		const w = item.shape ? get(item, _w) : 1
+		const h = item.shape ? get(item, _h) : 1
 		/**
 		 * w 宽度, h:高度, a: x距离左下标距离 b: y距离左下标距离
 		 * a = (b-1)/2
