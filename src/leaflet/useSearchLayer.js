@@ -1,7 +1,10 @@
 import * as L from "leaflet";
 import * as LS from 'leaflet-search'
+import useGeoLayer from "./useGeoLayer";
 
-export default function (geoLayer) {
+export default function () {
+	const [geoLayerRef] = useGeoLayer()
+	const geoLayer = geoLayerRef.value
 	// 搜索层
 	const controlSearch = new L.Control.Search({
 		position:'topleft',
@@ -33,5 +36,5 @@ export default function (geoLayer) {
 		});
 	});
 
-	return controlSearch
+	return [controlSearch]
 }

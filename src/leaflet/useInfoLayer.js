@@ -1,11 +1,13 @@
 // 信息层
 import * as L from "leaflet";
-import useConfig from "./useConfig";
+import { ref, unref } from "vue";
 
 const { TYPE } = useConfig()
+import useConfig from "./useConfig";
+
+const info = unref(ref(L.control()))
 
 export default function () {
-	const info = L.control()
 
 	info.onAdd = function (map) {
 		this._div = L.DomUtil.create('div', 'info')
@@ -34,5 +36,5 @@ export default function () {
 		this._div.innerHTML = str
 	}
 
-	return info
+	return [info]
 }
