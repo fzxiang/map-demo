@@ -16,13 +16,13 @@ const options = {
 			color: 'white'
 		};
 	},
-	filter: (feature, layer) => {
-		if (feature.properties) {
-			// If the property "underConstruction" exists and is true, return false (don't render features under construction)
-			return feature.properties.type !== 2;
-		}
-		return false;
-	},
+	// filter: (feature, layer) => {
+	// 	if (feature.properties) {
+	// 		// If the property "underConstruction" exists and is true, return false (don't render features under construction)
+	// 		return feature.properties.type !== 2;
+	// 	}
+	// 	return false;
+	// },
 
 	onEachFeature: (feature, layer) => {
 		layer.on({

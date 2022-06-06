@@ -10,7 +10,7 @@ export default function () {
 
 
 	const pos = reactive([0, 0])
-	const locationLayer = L.control({ position: 'bottomleft'})
+	const locationLayer = L.control({ position: 'bottomleft' })
 
 	locationLayer.onAdd = function (map) {
 		const _div = L.DomUtil.create('div', 'location-layer')
@@ -26,10 +26,10 @@ export default function () {
 					_div.querySelector('input[name=pos_x]').value,
 					_div.querySelector('input[name=pos_y]').value,
 				]
-				pos[1] = + pos_x || 0
-				pos[0] = + pos_y || 0
+				pos[0] = +pos_x || 0
+				pos[1] = +pos_y || 0
 
-				const latlng = L.latLng((pos[0] + TILE_NUM/2) , (pos[1] + TILE_NUM/2))
+				const latlng = L.latLng((pos[1] + TILE_NUM / 2), (pos[0] + TILE_NUM / 2))
 				mapRef.value.panTo(latlng, 4)
 			}
 		})
@@ -37,7 +37,5 @@ export default function () {
 	}
 
 
-
-
-	return [ locationLayer, pos ]
+	return [locationLayer, pos]
 }
