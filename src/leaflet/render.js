@@ -1,13 +1,8 @@
-import * as L from 'leaflet'
-import { toRefs, watch } from "vue";
-import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useSearchLayer from "./useSearchLayer";
 import useLocationLayer from "./useLocationLayer";
 import useGeoLayer from "./useGeoLayer";
 import userMapLayer from "./useMapLayer";
-
-
 
 export default function (elem, geoJSON) {
 	const [mapRef, mapRender] = userMapLayer()
@@ -31,12 +26,6 @@ export default function (elem, geoJSON) {
 	// 跳转层
 	const [locationLayer] = useLocationLayer()
 	locationLayer.addTo(map)
-
-	// watch(pos, () => {
-	// 	const latlng = L.latLng(pos[0], pos[1])
-	// 	console.log(latlng)
-	// 	map.setView(latlng, 5)
-	// })
 
 	return {
 		geoLayer,

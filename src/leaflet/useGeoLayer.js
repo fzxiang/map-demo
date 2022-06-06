@@ -1,5 +1,5 @@
 import * as L from 'leaflet'
-import { ref, unref } from "vue";
+import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 
