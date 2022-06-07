@@ -11,9 +11,9 @@ const config =  {
 		2: '地块类型-资源点',
 		3: '地块类型-玩家主城',
 	},
-	TILE_NUM: 20,
+	TILE_NUM: 80,
 	MaxZoom: 6,
-	MinZoom: 2,
+	MinZoom: 3,
 }
 export default function useConfig() {
 	return config

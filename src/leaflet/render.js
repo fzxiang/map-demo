@@ -4,7 +4,7 @@ import useLocationLayer from "./useLocationLayer";
 import useGeoLayer from "./useGeoLayer";
 import useMapLayer from "./useMapLayer";
 
-export default function (elem, geoJSON) {
+export default function (elem) {
 	const [mapRef, mapRender] = useMapLayer()
 	mapRender(elem)
 	const map = mapRef.value
@@ -14,10 +14,7 @@ export default function (elem, geoJSON) {
 	info.addTo(map)
 
 	// GEO层
-	const [geoLayerRef, setGeoJSON] = useGeoLayer()
-	setGeoJSON(geoJSON)
-	const geoLayer = geoLayerRef.value
-	geoLayer.addTo(map);
+	useGeoLayer()
 
 	// 搜索层
 	const [controlSearch] = useSearchLayer()
@@ -28,7 +25,6 @@ export default function (elem, geoJSON) {
 	locationLayer.addTo(map)
 
 	return {
-		geoLayer,
 		map
 	}
 

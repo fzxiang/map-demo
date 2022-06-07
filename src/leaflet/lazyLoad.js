@@ -1,6 +1,9 @@
-import { serialize } from '../utils/objectToForm';
+import * as L from "leaflet";
+import { serialize } from "../utils/objectToForm";
+import useConfig from "./useConfig";
+const { TILE_NUM } = useConfig()
 
-L.UGeoJSONLayer = L.GeoJSON.extend({
+const Class = L.GeoJSON.extend({
 	options: {
 		debug: false,
 		light: true,
@@ -39,7 +42,7 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 			return;
 		}
 		if (this.options.debug) {
-			console.debug('load Data');
+			console.log('load Data');
 		}
 
 		while(this._requests.length > this.options.maxRequests) { //This allows to stop the oldest requests
@@ -51,7 +54,7 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 		if (typeof this.options.parameters === 'function') {
 			postData = this.options.parameters();
 		} else {
-			for (var k in this.options.parameters) {
+			for (const k in this.options.parameters) {
 				if (typeof this.options.parameters[k].scope !== 'undefined') {
 					postData[k]=this.options.parameters[k].scope[k];
 				} else {
@@ -64,26 +67,39 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 
 		if (postData.zoom < this.options.minzoom) {
 			if (this.options.debug) {
-				console.debug('ignoring zoomlevel '+postData.zoom+' (< '+this.options.minzoom+')');
+				console.log('ignoring zoomlevel '+postData.zoom+' (< '+this.options.minzoom+')');
 			}
 			this.clearLayers();
 			return;
 		}
 
-		var bounds = this._map.getBounds();
+		const bounds = this._map.getBounds();
 		if (this.options.usebbox) {
 			postData.bbox = bounds.toBBoxString();
 		} else {
-			postData.south = bounds.getSouth();
-			postData.north = bounds.getNorth();
-			postData.east = bounds.getEast();
-			postData.west = bounds.getWest();
+			console.log(bounds)
+			const { lat, lng } = bounds.getCenter()
+			postData.data = {
+				startPosX: parseInt((lng - TILE_NUM/2).toString()),
+				startPosY: parseInt((lat - TILE_NUM/2).toString()),
+				lengthX: TILE_NUM,
+				lengthY: TILE_NUM,
+			}
+			// postData.north = bounds.getNorth();
+			// postData.east = bounds.getEast();
+			// postData.west = bounds.getWest();
+			// "data": {
+			// 	"startPosX": TILE_NUM, // 起始x坐标
+			// 		"startPosY": 0, // 起始y坐标
+			// 		"lengthX": TILE_NUM, // 范围x坐标
+			// 		"lengthY": TILE_NUM, // 范围y坐标
+			// }
 		}
 
 		var self = this;
 		var request = new XMLHttpRequest();
 		request.open('POST', this.options.endpoint, true);
-		for(var l in this.options.headers) {
+		for(const l in this.options.headers) {
 			if (typeof this.options.headers[l].scope !== 'undefined') {
 				request.setRequestHeader(l, this.options.headers[l].scope[l]);
 			} else {
@@ -92,7 +108,7 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 		}
 
 		request.onload = function() {
-			for(var i in self._requests) {
+			for(const i in self._requests) {
 				if(self._requests[i] === request) {
 					self._requests.splice(i,1); //We remove the request from the list of currently running requests.
 					break;
@@ -100,7 +116,7 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 			}
 
 			if (this.status >= 200 && this.status < 400) {
-				var data = JSON.parse(this.responseText);
+				let data = JSON.parse(this.responseText);
 
 				if (self.options.transformData) {
 					data = self.options.transformData(data);
@@ -113,8 +129,8 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 
 		this._requests.push(request);
 
-		if (this.options.enctype=='urlencoded' || this.options.enctype=='json') {
-			if (this.options.enctype=='urlencoded') {
+		if (this.options.enctype==='urlencoded' || this.options.enctype==='json') {
+			if (this.options.enctype==='urlencoded') {
 				// urlencoded request
 				var urlencoded = '';
 				for (var p in postData) {
@@ -158,13 +174,14 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 		}
 
 		if (this.options.debug) {
-			console.debug('add layer');
+			console.log('add Layer')
 		}
 	},
 
 	onRemove: function (map) {
+
 		if (this.options.debug) {
-			console.debug('remove layer');
+			console.log('remove layer');
 		}
 		L.LayerGroup.prototype.onRemove.call(this, map);
 
@@ -196,6 +213,6 @@ L.UGeoJSONLayer = L.GeoJSON.extend({
 	}
 });
 
-L.uGeoJSONLayer = function (uOptions, options) {
-	return new L.UGeoJSONLayer(uOptions, options);
+export default function (uOptions, options) {
+	return new Class(uOptions, options);
 };

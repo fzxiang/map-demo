@@ -2,11 +2,14 @@ import * as L from 'leaflet'
 import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
+import { pos2polygon } from "../utils/datafilter";
+import GeoJSON from "geojson";
+import lazyLoad from "./lazyLoad";
 
 const { COLOR } = useConfig()
 const [info] = useInfoLayer()
 
-const geoLayer = ref(null)
+const geoLayerRef = ref(null)
 const options = {
 	style: (data) => {
 		return {
@@ -50,14 +53,26 @@ function highlightFeature(e) {
 }
 
 function resetHighlight(e) {
-	geoLayer.value.resetStyle(e.target)
+	geoLayerRef.value.resetStyle(e.target)
 	info.update()
 }
 
 
-function setGeoJSON (geoJSON) {
-	geoLayer.value = L.geoJSON(geoJSON,options)
-}
+export default () => {
+	geoLayerRef.value = lazyLoad({
+		endpoint: "/map/api",
+		debug: true,
+		parameters: {
+			"do": "getMapList",
+		},
+		transformData: (res) => {
+			const json = pos2polygon(res.result)
+			return GeoJSON.parse(json, {
+				Polygon: 'Polygon'
+			})
+		}
+	}, options)
 
-export default () => [geoLayer, setGeoJSON]
+	return [geoLayerRef]
+}
 
