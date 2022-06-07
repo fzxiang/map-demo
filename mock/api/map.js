@@ -39,7 +39,7 @@ function resultSuccess(result, { message = 'ok' } = {}) {
 }
 
 export default [{
-	url: '/api/map',
+	url: '/dev_api/map',
 	timeout: 1000,
 	method: 'post',
 	response: () => {

@@ -59,7 +59,7 @@ function resetHighlight(e) {
 
 
 geoLayerRef.value = lazyLoad({
-	endpoint: "/map/api",
+	endpoint: "/api/map",
 	// debug: true,
 	parameters: {
 		"do": "getMapList",
