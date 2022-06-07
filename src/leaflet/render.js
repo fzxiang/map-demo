@@ -3,7 +3,6 @@ import useSearchLayer from "./useSearchLayer";
 import useLocationLayer from "./useLocationLayer";
 import useGeoLayer from "./useGeoLayer";
 import useMapLayer from "./useMapLayer";
-import useLazyLoad from "./useLazyLoad";
 
 export default function (elem, geoJSON) {
 	const [mapRef, mapRender] = useMapLayer()
@@ -27,9 +26,6 @@ export default function (elem, geoJSON) {
 	// 跳转层
 	const [locationLayer] = useLocationLayer()
 	locationLayer.addTo(map)
-
-	// 数据懒加载
-	useLazyLoad()
 
 	return {
 		geoLayer,
