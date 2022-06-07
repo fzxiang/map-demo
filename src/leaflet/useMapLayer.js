@@ -12,7 +12,7 @@ function renderMap (elem) {
 			doubleClickZoom: false,
 			crs: L.CRS.Simple, // 简单坐标系
 		})
-		.setView([TILE_NUM / 2, TILE_NUM / 2], 4)
+		.setView([TILE_NUM, TILE_NUM], 4)
 		.setMaxZoom(MaxZoom)
 		.setMinZoom(MinZoom)
 }

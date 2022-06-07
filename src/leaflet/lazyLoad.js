@@ -79,9 +79,9 @@ const Class = L.GeoJSON.extend({
 		} else {
 			const { lat, lng } = bounds.getCenter()
 			postData.data = {
-				startPosX: parseInt((lng - TILE_NUM/2).toString()),
+				startPosX: parseInt((lng - TILE_NUM).toString()),
 				startPosY: parseInt((lat - TILE_NUM/2).toString()),
-				lengthX: TILE_NUM,
+				lengthX: TILE_NUM * 2,
 				lengthY: TILE_NUM,
 			}
 		}
