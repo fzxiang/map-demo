@@ -58,21 +58,20 @@ function resetHighlight(e) {
 }
 
 
-export default () => {
-	geoLayerRef.value = lazyLoad({
-		endpoint: "/map/api",
-		debug: true,
-		parameters: {
-			"do": "getMapList",
-		},
-		transformData: (res) => {
-			const json = pos2polygon(res.result)
-			return GeoJSON.parse(json, {
-				Polygon: 'Polygon'
-			})
-		}
-	}, options)
+geoLayerRef.value = lazyLoad({
+	endpoint: "/map/api",
+	// debug: true,
+	parameters: {
+		"do": "getMapList",
+	},
+	transformData: (res) => {
+		const json = pos2polygon(res.result)
+		return GeoJSON.parse(json, {
+			Polygon: 'Polygon'
+		})
+	}
+}, options)
+console.log(geoLayerRef)
 
-	return [geoLayerRef]
-}
+export default () => [geoLayerRef]
 

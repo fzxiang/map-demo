@@ -37,7 +37,7 @@ const Class = L.GeoJSON.extend({
 		this._layersOld = [];
 		this._requests = [];
 	},
-	onMoveEnd: function () {
+	onMoveEnd: function (e) {
 		if (this.options.disabled) {
 			return;
 		}
@@ -49,7 +49,7 @@ const Class = L.GeoJSON.extend({
 			this._requests.shift().abort();
 		}
 
-		var postData = {};
+		let postData = {};
 
 		if (typeof this.options.parameters === 'function') {
 			postData = this.options.parameters();
@@ -77,7 +77,6 @@ const Class = L.GeoJSON.extend({
 		if (this.options.usebbox) {
 			postData.bbox = bounds.toBBoxString();
 		} else {
-			console.log(bounds)
 			const { lat, lng } = bounds.getCenter()
 			postData.data = {
 				startPosX: parseInt((lng - TILE_NUM/2).toString()),
@@ -85,19 +84,10 @@ const Class = L.GeoJSON.extend({
 				lengthX: TILE_NUM,
 				lengthY: TILE_NUM,
 			}
-			// postData.north = bounds.getNorth();
-			// postData.east = bounds.getEast();
-			// postData.west = bounds.getWest();
-			// "data": {
-			// 	"startPosX": TILE_NUM, // 起始x坐标
-			// 		"startPosY": 0, // 起始y坐标
-			// 		"lengthX": TILE_NUM, // 范围x坐标
-			// 		"lengthY": TILE_NUM, // 范围y坐标
-			// }
 		}
 
-		var self = this;
-		var request = new XMLHttpRequest();
+		const self = this;
+		const request = new XMLHttpRequest();
 		request.open('POST', this.options.endpoint, true);
 		for(const l in this.options.headers) {
 			if (typeof this.options.headers[l].scope !== 'undefined') {
@@ -132,8 +122,8 @@ const Class = L.GeoJSON.extend({
 		if (this.options.enctype==='urlencoded' || this.options.enctype==='json') {
 			if (this.options.enctype==='urlencoded') {
 				// urlencoded request
-				var urlencoded = '';
-				for (var p in postData) {
+				let urlencoded = '';
+				for (const p in postData) {
 					if (postData.hasOwnProperty(p)) {
 						if (urlencoded.length > 0) {
 							urlencoded += '&';
@@ -147,12 +137,6 @@ const Class = L.GeoJSON.extend({
 				request.send(JSON.stringify(postData));
 			}
 		} else {
-			// var postFormData = new FormData();
-			// for (var q in postData) {
-			// 	if (postData.hasOwnProperty(q)) {
-			// 		postFormData.append(q, postData[q]);
-			// 	}
-			// }
 			request.send(serialize(postData));
 		}
 	},

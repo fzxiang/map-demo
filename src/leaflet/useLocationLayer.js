@@ -2,12 +2,13 @@ import * as L from "leaflet";
 import { reactive } from "vue";
 import userMapLayer from "./useMapLayer";
 import useConfig from "./useConfig";
+import useGeoLayer from "./useGeoLayer";
 
 export default function () {
 
 	const [mapRef] = userMapLayer()
 	const { TILE_NUM } = useConfig()
-
+	const [geoLayerRef] = useGeoLayer()
 
 	const pos = reactive([0, 0])
 	const locationLayer = L.control({ position: 'bottomleft' })
@@ -30,7 +31,8 @@ export default function () {
 				pos[1] = +pos_y || 0
 
 				const latlng = L.latLng((pos[1] + TILE_NUM / 2), (pos[0] + TILE_NUM / 2))
-				mapRef.value.panTo(latlng, 4)
+				mapRef.value.setView(latlng, 4)
+				geoLayerRef.value.onMoveEnd()
 			}
 		})
 		return _div
