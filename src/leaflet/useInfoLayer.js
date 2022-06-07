@@ -31,7 +31,7 @@ export default function () {
 			str += `<br>拥有者：${owner}`
 		}
 		if (level) {
-			str += `<br>等级：${name}`
+			str += `<br>等级：${level}`
 		}
 		this._div.innerHTML = str
 	}
