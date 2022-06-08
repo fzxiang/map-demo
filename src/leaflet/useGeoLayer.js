@@ -6,19 +6,26 @@ import { pos2polygon } from "../utils/datafilter";
 import GeoJSON from "geojson";
 import lazyLoad from "./lazyLoad";
 
-const [{ COLOR }] = useConfig()
+const [config] = useConfig()
 const [info] = useInfoLayer()
 
 const geoLayerRef = ref(null)
 const options = {
 	style: (data) => {
-		const { color_type } = data.properties
-		let color = ''
-		if (color_type) {
-
+		const { COLOR, color_type_mapping } = config
+		const { colour_type: color_type, type, level } = data.properties
+		let fillColor = ''
+		let fillOpacity = .6
+		// 有分阵营角色颜色
+		color_type ?
+			fillColor = color_type_mapping[color_type] :
+			fillColor = COLOR[type]
+		if(type === 2) {
+			fillOpacity = level / 5
 		}
 		return {
-			fillColor: COLOR[data.properties.type],
+			fillColor,
+			fillOpacity,
 			// dashArray: '5',
 			weight: 2,
 			color: 'white'

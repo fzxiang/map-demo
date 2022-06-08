@@ -16,8 +16,10 @@ async function renderMap (elem) {
 		setConfig({
 			MaxHeight: map_height,
 			MaxWidth: map_width,
-			colour_type_mapping
+			color_type_mapping: colour_type_mapping
 		})
+		console.log('setConfig', config)
+
 	} catch (e) {
 		console.log(e)
 	}

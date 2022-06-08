@@ -7,6 +7,7 @@ import useMapLayer from "./useMapLayer";
 export default async function (elem) {
 	const [mapRef, mapRender] = useMapLayer()
 	await mapRender(elem)
+	console.log('await map')
 	const map = mapRef.value
 
 	// 信息层
