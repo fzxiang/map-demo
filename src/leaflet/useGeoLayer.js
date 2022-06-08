@@ -22,6 +22,8 @@ const options = {
 			fillColor = COLOR[type]
 		if(type === 2) {
 			fillOpacity = level / 5
+		} else if (type === 0) {
+			fillOpacity = .4
 		}
 		return {
 			fillColor,
