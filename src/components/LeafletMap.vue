@@ -12,7 +12,7 @@ import render from '../leaflet/render'
 const containerRef = ref(null)
 
 onMounted(async () => {
-  render(containerRef.value)
+  await render(containerRef.value)
 })
 
 </script>
@@ -24,7 +24,11 @@ onMounted(async () => {
   right: 0;
   top: 0;
   bottom: 0;
-  padding: 100px;
+}
+@media(min-width: 1080px) {
+  .wrapper{
+    padding: 100px 200px;
+  }
 }
 
 .container {

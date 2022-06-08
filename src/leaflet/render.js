@@ -4,9 +4,9 @@ import useLocationLayer from "./useLocationLayer";
 import useGeoLayer from "./useGeoLayer";
 import useMapLayer from "./useMapLayer";
 
-export default function (elem) {
+export default async function (elem) {
 	const [mapRef, mapRender] = useMapLayer()
-	mapRender(elem)
+	await mapRender(elem)
 	const map = mapRef.value
 
 	// 信息层

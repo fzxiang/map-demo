@@ -2,7 +2,7 @@
 import * as L from "leaflet";
 import { ref, unref } from "vue";
 
-const { TYPE } = useConfig()
+const [{ TYPE }] = useConfig()
 import useConfig from "./useConfig";
 
 const info = unref(ref(L.control()))

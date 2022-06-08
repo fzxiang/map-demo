@@ -7,7 +7,7 @@ import useGeoLayer from "./useGeoLayer";
 export default function () {
 
 	const [mapRef] = userMapLayer()
-	const { TILE_NUM } = useConfig()
+	const [{ TILE_NUM }] = useConfig()
 	const [geoLayerRef] = useGeoLayer()
 
 	const pos = reactive([0, 0])
@@ -27,10 +27,10 @@ export default function () {
 					_div.querySelector('input[name=pos_x]').value,
 					_div.querySelector('input[name=pos_y]').value,
 				]
-				pos[0] = +pos_x || 0
-				pos[1] = +pos_y || 0
+				pos[0] = (+pos_x || 0) +  TILE_NUM / 2
+				pos[1] = (+pos_y || 0) +  TILE_NUM / 2
 
-				const latlng = L.latLng((pos[1] + TILE_NUM / 2), (pos[0] + TILE_NUM / 2))
+				const latlng = L.latLng(pos[1], pos[0])
 				mapRef.value.setView(latlng, 4)
 				geoLayerRef.value.onMoveEnd()
 			}

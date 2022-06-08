@@ -6,12 +6,17 @@ import { pos2polygon } from "../utils/datafilter";
 import GeoJSON from "geojson";
 import lazyLoad from "./lazyLoad";
 
-const { COLOR } = useConfig()
+const [{ COLOR }] = useConfig()
 const [info] = useInfoLayer()
 
 const geoLayerRef = ref(null)
 const options = {
 	style: (data) => {
+		const { color_type } = data.properties
+		let color = ''
+		if (color_type) {
+
+		}
 		return {
 			fillColor: COLOR[data.properties.type],
 			// dashArray: '5',

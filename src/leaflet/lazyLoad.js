@@ -1,7 +1,7 @@
 import * as L from "leaflet";
 import { serialize } from "../utils/objectToForm";
 import useConfig from "./useConfig";
-const { TILE_NUM } = useConfig()
+const [{ TILE_NUM }] = useConfig()
 
 const Class = L.GeoJSON.extend({
 	options: {

@@ -14,7 +14,13 @@ const config =  {
 	TILE_NUM: 50,
 	MaxZoom: 6,
 	MinZoom: 4,
+	MaxWidth: 1000,
+	MaxHeight: 1000,
 }
 export default function useConfig() {
-	return config
+	return [config, setConfig]
+}
+
+function setConfig(params) {
+	Object.assign(config, params)
 }
