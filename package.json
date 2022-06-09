@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
+    "dotenv": "^16.0.1",
     "mockjs": "^1.1.0",
     "rollup": "^2.74.1",
     "vite": "^2.9.9",

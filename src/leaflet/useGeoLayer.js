@@ -2,8 +2,6 @@ import * as L from 'leaflet'
 import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
-import { pos2polygon } from "../utils/datafilter";
-import GeoJSON from "geojson";
 import lazyLoad from "./lazyLoad";
 
 const [config] = useConfig()
@@ -29,7 +27,7 @@ const options = {
 			fillColor,
 			fillOpacity,
 			// dashArray: '5',
-			weight: 2,
+			weight: 1,
 			color: 'white'
 		};
 	},
@@ -53,7 +51,7 @@ function highlightFeature(e) {
 	const layer = e.target;
 
 	layer.setStyle({
-		weight: 4,
+		weight: 3,
 		opacity: 1,
 		color: '#f8be00',
 		fillColor: '#f8be00',
@@ -73,17 +71,7 @@ function resetHighlight(e) {
 
 
 geoLayerRef.value = lazyLoad({
-	endpoint: "/api/map",
-	// debug: true,
-	parameters: {
-		"do": "getMapList",
-	},
-	transformData: (res) => {
-		const json = pos2polygon(res.result)
-		return GeoJSON.parse(json, {
-			Polygon: 'Polygon'
-		})
-	}
+	// light: true
 }, options)
 console.log(geoLayerRef)
 

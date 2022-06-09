@@ -9,8 +9,6 @@ const VITE_PROXY = [["/api","http://172.18.90.213:8082/api"]]
 const viteEnv = {
   VITE_USE_MOCK: true
 }
-console.log(import.meta.globEager)
-// https://vitejs.dev/config/
 export default ({ command }) => {
   const isBuild = command === 'build';
 

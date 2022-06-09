@@ -29,7 +29,7 @@ async function renderMap (elem) {
 	const corner2 = L.latLng(MaxHeight, MaxWidth)
 	mapRef.value = L
 		.map(elem, {
-			preferCanvas: true,
+			// preferCanvas: true,
 			doubleClickZoom: false,
 			crs: L.CRS.Simple, // 简单坐标系
 			attributionControl: false,
