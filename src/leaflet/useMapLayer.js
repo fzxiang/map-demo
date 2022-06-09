@@ -23,7 +23,7 @@ async function renderMap (elem) {
 		console.log(e)
 	}
 
-	const { TILE_NUM, MaxZoom, MinZoom, MaxHeight, MaxWidth } = config
+	const { TILE_NUM, MaxZoom, MinZoom, MaxHeight, MaxWidth, DEFAULT_ZOOM } = config
 	const corner1 = L.latLng(0,  0)
 	const corner2 = L.latLng(MaxHeight, MaxWidth)
 	mapRef.value = L
@@ -34,9 +34,11 @@ async function renderMap (elem) {
 			attributionControl: false,
 			maxBounds: L.latLngBounds(corner1, corner2)
 		})
-		.setView([TILE_NUM, TILE_NUM], 4)
+		.setView([TILE_NUM, TILE_NUM], DEFAULT_ZOOM)
 		.setMaxZoom(MaxZoom)
 		.setMinZoom(MinZoom)
 		.on('dragend', ()=>console.log('drag'))
 }
 export default () => [mapRef, renderMap]
+
+

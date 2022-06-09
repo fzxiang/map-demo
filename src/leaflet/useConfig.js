@@ -16,6 +16,7 @@ const config =  {
 	MinZoom: 4,
 	MaxWidth: 1000,
 	MaxHeight: 1000,
+	DEFAULT_ZOOM: 6
 }
 export default function useConfig() {
 	return [config, setConfig]

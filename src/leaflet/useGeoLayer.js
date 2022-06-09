@@ -3,6 +3,7 @@ import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useData from "./useData";
+import useImageLayer from "./useImageLayer";
 
 const [config] = useConfig()
 const [info] = useInfoLayer()
@@ -10,6 +11,8 @@ const [dataRef, setData] = useData()
 const mapRef= ref(null)
 
 const geoLayerRef = ref(null)
+
+const [imgLayerRef] = useImageLayer()
 
 const options = {
 	style: (data) => {
@@ -74,11 +77,19 @@ function resetHighlight(e) {
 }
 
 async function onMoveEnd(e) {
+	if (e) {
+		if(e.type === 'zoomend') {
+			// 放大缩小是 清除图片<defs>
+			console.log(e.type)
+			L.DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
+		}
+	}
 	const _map = mapRef.value;
 	const bounds = _map.getBounds();
 	const boxString = bounds.toBBoxString()
 	const zoom =  _map.getZoom();
 	const { lat, lng } = bounds.getCenter()
+	console.log('数据变化前')
 	await setData({
 		lat,
 		lng,
@@ -92,17 +103,24 @@ async function onMoveEnd(e) {
 
 	//Then we add the new data
 	geoLayerRef.value.addData(data);
+
+	// image
+	imgLayerRef.value.clearLayers()
+	imgLayerRef.value.addData(data)
 }
 
-geoLayerRef.value = L.geoJSON(undefined, options)
-geoLayerRef.value.onAdd = async (map) => {
-	console.log('add')
+const geoJSONLayer = L.geoJSON(undefined, options)
+geoJSONLayer.onAdd = async (map) => {
 	mapRef.value = map
 	await onMoveEnd()
 	map.on('dragend', onMoveEnd, this);
 	map.on('zoomend', onMoveEnd, this);
 	map.on('refresh', onMoveEnd, this);
 }
+
+
+
+geoLayerRef.value = geoJSONLayer
 
 export default () => [geoLayerRef]
 
