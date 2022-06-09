@@ -14,19 +14,22 @@ export default async function (elem) {
 	const [info] = useInfoLayer()
 	info.addTo(map)
 
-	const myIcon = L.icon({
-		iconUrl: '/icon/0.png',
-		// iconSize: [100, 100],
-		iconAnchor: [22, 94],
-		popupAnchor: [-3, -76],
-		// shadowUrl: 'my-icon-shadow.png',
-		// shadowSize: [68, 95],
-		// shadowAnchor: [22, 94]
-	});
-	L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
+	// const myIcon = L.icon({
+	// 	iconUrl: '/icon/0.png',
+	// 	// iconSize: [100, 100],
+	// 	iconAnchor: [22, 94],
+	// 	popupAnchor: [-3, -76],
+	// 	// shadowUrl: 'my-icon-shadow.png',
+	// 	// shadowSize: [68, 95],
+	// 	// shadowAnchor: [22, 94]
+	// });
+	// L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
 
 	// GEO层
-	useGeoLayer()
+	const [geoLayerRef] = useGeoLayer()
+	console.log(map)
+	geoLayerRef.value.addTo(map)
+
 
 	// 搜索层
 	const [controlSearch] = useSearchLayer()

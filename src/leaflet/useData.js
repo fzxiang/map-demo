@@ -9,8 +9,6 @@ const setData = async ({lat, lng, zoom, boxString}) => {
 	const w = parseInt(x1-x0 + 15 + "")
 	const h = parseInt(y1-y0 + 10 + "")
 
-	console.log(w, h)
-	console.log(lng, lat,)
 	const params = {
 		do: 'getMapList'
 	}

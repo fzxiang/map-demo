@@ -37,5 +37,6 @@ async function renderMap (elem) {
 		.setView([TILE_NUM, TILE_NUM], 4)
 		.setMaxZoom(MaxZoom)
 		.setMinZoom(MinZoom)
+		.on('dragend', ()=>console.log('drag'))
 }
 export default () => [mapRef, renderMap]

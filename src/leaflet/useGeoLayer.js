@@ -2,12 +2,15 @@ import * as L from 'leaflet'
 import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
-import lazyLoad from "./lazyLoad";
+import useData from "./useData";
 
 const [config] = useConfig()
 const [info] = useInfoLayer()
+const [dataRef, setData] = useData()
+const mapRef= ref(null)
 
 const geoLayerRef = ref(null)
+
 const options = {
 	style: (data) => {
 		const { COLOR, color_type_mapping } = config
@@ -47,6 +50,7 @@ const options = {
 	}
 }
 
+
 function highlightFeature(e) {
 	const layer = e.target;
 
@@ -69,10 +73,36 @@ function resetHighlight(e) {
 	info.update()
 }
 
+async function onMoveEnd(e) {
+	const _map = mapRef.value;
+	const bounds = _map.getBounds();
+	const boxString = bounds.toBBoxString()
+	const zoom =  _map.getZoom();
+	const { lat, lng } = bounds.getCenter()
+	await setData({
+		lat,
+		lng,
+		zoom,
+		boxString,
+	})
 
-geoLayerRef.value = lazyLoad({
-	// light: true
-}, options)
+	let data = dataRef.value
+
+	geoLayerRef.value.clearLayers();//if needed, we clean the layers
+
+	//Then we add the new data
+	geoLayerRef.value.addData(data);
+}
+
+geoLayerRef.value = L.geoJSON(undefined, options)
+geoLayerRef.value.onAdd = async (map) => {
+	console.log('add')
+	mapRef.value = map
+	await onMoveEnd()
+	map.on('dragend', onMoveEnd, this);
+	map.on('zoomend', onMoveEnd, this);
+	map.on('refresh', onMoveEnd, this);
+}
 
 export default () => [geoLayerRef]
 
