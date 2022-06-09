@@ -8,9 +8,6 @@ const Class = L.GeoJSON.extend({
 		usebbox: false,
 		pollTime:0,
 		once: false,
-		minzoom: 0,
-		afterFetch: function () {},
-		after: function (data) {},
 		disabled: false,
 	},
 	callback: function (data) {
@@ -18,7 +15,6 @@ const Class = L.GeoJSON.extend({
 
 		//Then we add the new data
 		this.addData(data);
-		this.options.after(data);
 	},
 	initialize: function (uOptions, options) {
 		L.GeoJSON.prototype.initialize.call(this, undefined, options);
@@ -37,16 +33,17 @@ const Class = L.GeoJSON.extend({
 
 		const self = this;
 		const bounds = self._map.getBounds();
+		const boxString = bounds.toBBoxString()
 		const zoom =  self._map.getZoom();
 		const { lat, lng } = bounds.getCenter()
 		await setData({
 			lat,
 			lng,
-			zoom
+			zoom,
+			boxString,
 		})
 
 		let data = dataRef.value
-		self.options.afterFetch();
 		self.callback(data);
 
 	},
@@ -99,9 +96,6 @@ const Class = L.GeoJSON.extend({
 		this._map = null;
 	},
 
-	toggleDisabled() {
-		this.options.disabled = !this.options.disabled;
-	}
 });
 
 export default function (uOptions, options) {

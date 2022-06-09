@@ -1,20 +1,24 @@
 import { ref } from "vue";
 import { getMapApi } from "../api/map";
-import useConfig from "./useConfig";
 import GeoJSON from "geojson";
 import { pos2polygon } from "../utils/datafilter";
 
 const dataRef = ref([])
-const setData = async ({lat, lng, zoom}) => {
-	const [{ TILE_NUM }] = useConfig()
+const setData = async ({lat, lng, zoom, boxString}) => {
+	const [x0,y0,x1,y1] = boxString.split(',')
+	const w = parseInt(x1-x0 + 15 + "")
+	const h = parseInt(y1-y0 + 10 + "")
+
+	console.log(w, h)
+	console.log(lng, lat,)
 	const params = {
 		do: 'getMapList'
 	}
 	params.data = {
-		startPosX: parseInt((lng - TILE_NUM).toString()),
-		startPosY: parseInt((lat - TILE_NUM/2).toString()),
-		lengthX: TILE_NUM * 2,
-		lengthY: TILE_NUM,
+		startPosX: parseInt((lng - w/2).toString()),
+		startPosY: parseInt((lat - h/2).toString()),
+		lengthX: w,
+		lengthY: h,
 		zoom,
 	}
 	const { result } = await getMapApi(params)

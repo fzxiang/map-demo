@@ -73,7 +73,6 @@ function resetHighlight(e) {
 geoLayerRef.value = lazyLoad({
 	// light: true
 }, options)
-console.log(geoLayerRef)
 
 export default () => [geoLayerRef]
 
