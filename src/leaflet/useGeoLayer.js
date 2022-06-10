@@ -65,9 +65,6 @@ function highlightFeature(e) {
 		fillOpacity: .6
 	});
 
-	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-		layer.bringToFront();
-	}
 	info.update(layer.feature.properties);
 }
 
