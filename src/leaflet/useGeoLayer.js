@@ -4,9 +4,11 @@ import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useData from "./useData";
 import useImageLayer from "./useImageLayer";
+import { getMapApi } from "../api/map";
+import debounce from "lodash.debounce";
 
 const [config] = useConfig()
-const [info] = useInfoLayer()
+const [infoRef, update,  appendData ,infoLoading] = useInfoLayer()
 const [dataRef, setData, extendParams] = useData()
 const mapRef= ref(null)
 
@@ -64,7 +66,14 @@ const options = {
 	}
 }
 
-
+// 使用防抖器, 请求接口并加载地块其它信息
+let properties = null
+const loadOthers = debounce(async (properties)=>{
+	const res = await getMapApi({
+		do: 'getConfig'
+	})
+	infoLoading(false)
+}, 800)
 function highlightFeature(e) {
 	const layer = e.target;
 
@@ -75,13 +84,16 @@ function highlightFeature(e) {
 		fillColor: '#f8be00',
 		fillOpacity: .6
 	});
+	properties = layer.feature.properties
+	update(layer.feature.properties);
+	infoLoading(true)
+	loadOthers()
 
-	info.update(layer.feature.properties);
 }
 
 function resetHighlight(e) {
 	geoLayerRef.value.resetStyle(e.target)
-	info.update()
+	update()
 }
 
 async function onMoveEnd(e) {

@@ -9,6 +9,7 @@ specifiers:
   leaflet: ^1.8.0
   leaflet-search: ^3.0.2
   less: ^4.1.2
+  lodash.debounce: ^4.0.8
   lodash.get: ^4.4.2
   mockjs: ^1.1.0
   rollup: ^2.74.1
@@ -23,6 +24,7 @@ dependencies:
   leaflet: registry.npmmirror.com/leaflet/1.8.0
   leaflet-search: registry.npmmirror.com/leaflet-search/3.0.2
   less: registry.npmmirror.com/less/4.1.2
+  lodash.debounce: registry.npmmirror.com/lodash.debounce/4.0.8
   lodash.get: registry.npmmirror.com/lodash.get/4.4.2
   vue: registry.npmmirror.com/vue/3.2.34
 
@@ -1221,6 +1223,12 @@ packages:
       source-map: registry.npmmirror.com/source-map/0.6.1
     transitivePeerDependencies:
       - supports-color
+
+  registry.npmmirror.com/lodash.debounce/4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz}
+    name: lodash.debounce
+    version: 4.0.8
+    dev: false
 
   registry.npmmirror.com/lodash.get/4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.get/-/lodash.get-4.4.2.tgz}

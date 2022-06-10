@@ -24,21 +24,30 @@ onMounted(async () => {
   right: 0;
   top: 0;
   bottom: 0;
+  text-align: center;
 }
-@media(min-width: 1080px) {
+@media(min-width: 1680px) {
   .wrapper{
     padding: 100px 200px;
   }
 }
 
+
+
 .container {
-  display: flex;
+  display: inline-block;
   height: 100%;
+  width: 100%;
   border: 1px solid #ccc;
-  justify-content: center;
-  align-items: center;
+  /*justify-content: center;*/
+  /*align-items: center;*/
   overflow: hidden;
 }
-
+@media(min-width: 1920px) {
+  .container{
+    width: 1440px;
+    height: 900px
+  }
+}
 
 </style>

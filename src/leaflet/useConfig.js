@@ -13,7 +13,7 @@ const config =  {
 	},
 	TILE_NUM: 50,
 	MaxZoom: 7,
-	MinZoom: 4,
+	MinZoom: 5,
 	MaxWidth: 1000,
 	MaxHeight: 1000,
 	DEFAULT_ZOOM: 6

@@ -10,8 +10,8 @@ export default async function (elem) {
 	const map = mapRef.value
 
 	// 信息层
-	const [info] = useInfoLayer()
-	info.addTo(map)
+	const [infoRef] = useInfoLayer()
+	infoRef.value.addTo(map)
 
 	// GEO层 ps:搜索层中引入了geo
 	// const [geoLayerRef] = useGeoLayer()
