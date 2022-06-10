@@ -15,8 +15,9 @@ const options = {
 	},
 	filter: (feature, layer) => {
 		if (feature.properties) {
+			const { icon } = feature.properties
 			// If the property "underConstruction" exists and is true, return false (don't render features under construction)
-			return feature.properties.icon > 0;
+			return( icon >= 0 && icon < 1000) || icon > 2000;
 		}
 		return false;
 	},

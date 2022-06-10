@@ -55,7 +55,7 @@ L.SVG.include({
 		const _img_url = options.fill.substring(4, options.fill.length - 1);
 		const _ref_id = _img_url.match(/(\d+)/)[1];
 		let multiple = 1
-		if (_ref_id === 0 || _ref_id > 4000) {
+		if (_ref_id == 0 || _ref_id > 4000) {
 			multiple = 3
 		}
 		let _p = document.getElementById(_ref_id);
