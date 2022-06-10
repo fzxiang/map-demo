@@ -8,7 +8,7 @@ export default function () {
 
 	const [mapRef] = userMapLayer()
 	const [{ TILE_NUM }] = useConfig()
-	const [geoLayerRef] = useGeoLayer()
+	const [geoLayerRef, onMoveEnd] = useGeoLayer()
 
 	const pos = reactive([0, 0])
 	const locationLayer = L.control({ position: 'bottomleft' })
@@ -32,7 +32,7 @@ export default function () {
 
 				const latlng = L.latLng(pos[1], pos[0])
 				mapRef.value.setView(latlng, 4)
-				geoLayerRef.value.onMoveEnd()
+				onMoveEnd()
 			}
 		})
 		return _div

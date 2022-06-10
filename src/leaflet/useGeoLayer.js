@@ -119,5 +119,5 @@ geoJSONLayer.onAdd = async (map) => {
 
 geoLayerRef.value = geoJSONLayer
 
-export default () => [geoLayerRef]
+export default () => [geoLayerRef, onMoveEnd]
 
