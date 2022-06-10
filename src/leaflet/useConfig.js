@@ -12,7 +12,7 @@ const config =  {
 		3: '地块类型-玩家主城',
 	},
 	TILE_NUM: 50,
-	MaxZoom: 6,
+	MaxZoom: 7,
 	MinZoom: 4,
 	MaxWidth: 1000,
 	MaxHeight: 1000,

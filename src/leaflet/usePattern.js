@@ -2,8 +2,8 @@ import * as L from "leaflet";
 
 L.SVG.include({
 	_updateStyle: function (layer) {
-		var path = layer._path,
-			options = layer.options;
+		const path = layer._path
+		const	options = layer.options
 
 		if (!path) { return; }
 
@@ -46,34 +46,38 @@ L.SVG.include({
 	},
 
 	__fillPattern: function(layer) {
-		var path = layer._path,
-			options = layer.options;
-
+		const path = layer._path
+		const options = layer.options
 		if (!this._defs) {
 			this._defs = L.SVG.create('defs');
 			this._container.appendChild(this._defs);
 		}
-		var _img_url = options.fill.substring(4, options.fill.length-1);
-		var _ref_id = _img_url.match(/(\d+)/)[1];
-		var _p = document.getElementById(_ref_id);
+		const _img_url = options.fill.substring(4, options.fill.length - 1);
+		const _ref_id = _img_url.match(/(\d+)/)[1];
+		let multiple = 1
+		if (_ref_id === 0 || _ref_id > 4000) {
+			multiple = 3
+		}
+		let _p = document.getElementById(_ref_id);
 		const zoom = this._zoom
-		const rect = 2**zoom
+		const rect = 2**zoom * multiple
 
 		if (!_p) {
-			var _im = new Image();
+			const _im = new Image();
 			_im.src = _img_url;
 
 			_p = L.SVG.create('pattern');
 			_p.setAttribute('id', _ref_id);
-			_p.setAttribute('x', 10);
-			_p.setAttribute('y', -12);
-			_p.setAttribute('patternUnits', 'userSpaceOnUse');
-			_p.setAttribute('width', rect);
-			_p.setAttribute('height', rect);
+			_p.setAttribute('x', 0);
+			_p.setAttribute('y', 0);
+			_p.setAttribute('patternUnits', 'objectBoundingBox');
+			_p.setAttribute('width', 1);
+			_p.setAttribute('height', 1);
 
 			this._defs.appendChild(_p);
 
-			var _img = L.SVG.create('image');
+			// const
+			const _img = L.SVG.create('image');
 			_img.setAttribute('x', '0');
 			_img.setAttribute('y', '0');
 			_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', _img_url);
