@@ -4,6 +4,10 @@ import GeoJSON from "geojson";
 import { pos2polygon } from "../utils/datafilter";
 
 const dataRef = ref([])
+const extendParams = ref({
+	uId: '',
+	guildId: '',
+})
 const setData = async ({lat, lng, zoom, boxString}) => {
 	const [x0,y0,x1,y1] = boxString.split(',')
 	const w = parseInt(x1-x0 + 15 + "")
@@ -18,6 +22,7 @@ const setData = async ({lat, lng, zoom, boxString}) => {
 		lengthX: w,
 		lengthY: h,
 		zoom,
+		...extendParams.value,
 	}
 	const { result } = await getMapApi(params)
 	const json = pos2polygon(result)
@@ -26,4 +31,4 @@ const setData = async ({lat, lng, zoom, boxString}) => {
 	})
 }
 
-export default () => [dataRef, setData]
+export default () => [dataRef, setData, extendParams]

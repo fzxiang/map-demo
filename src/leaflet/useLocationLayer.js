@@ -4,6 +4,8 @@ import userMapLayer from "./useMapLayer";
 import useConfig from "./useConfig";
 import useGeoLayer from "./useGeoLayer";
 
+import useData from "./useData";
+
 export default function () {
 
 	const [mapRef] = userMapLayer()
@@ -14,26 +16,47 @@ export default function () {
 	const locationLayer = L.control({ position: 'bottomleft' })
 
 	locationLayer.onAdd = function (map) {
-		const _div = L.DomUtil.create('div', 'location-layer')
-		_div.innerHTML = `<div class="form-item">
-				<div><label>X坐标：</label><input type="number" name="pos_x" value="0"></div>
-				<div><label>Y坐标：</label><input type="number" name="pos_y" value="0"></div>
+		const _div = L.DomUtil.create('div')
+		_div.innerHTML = `
+		<div class="location-layer">
+			<div class="form-item">
+				<div><label>UID：</label><input type="number" name="uId" value=""></div>
+				<div><label>联盟：</label><input type="number" name="guildId" value=""></div>
+			</div>
+			<button class="search-button">搜索</button>
+		</div>
+		<div class="location-layer">
+			<div class="form-item">
+				<div><label>坐标：</label><input type="text" name="pos" value="0,0"></div>
 			</div>
 			<button class="location-button">跳转</button>
+		</div>
 `
 		L.DomEvent.on(_div, 'click', function (e) {
 			if (e.target.className === 'location-button') {
-				const [pos_x, pos_y] = [
-					_div.querySelector('input[name=pos_x]').value,
-					_div.querySelector('input[name=pos_y]').value,
-				]
-				pos[0] = (+pos_x || 0) +  TILE_NUM / 2
-				pos[1] = (+pos_y || 0) +  TILE_NUM / 2
+				const pos = _div.querySelector('input[name=pos]').value.split(',')
+				const x = pos[0] || 0
+				const y = pos[1] || 0
+				console.log(mapRef.value)
+				console.log(x, y)
 
-				const latlng = L.latLng(pos[1], pos[0])
-				mapRef.value.setView(latlng, 4)
+				const latlng = L.latLng(y, x)
+				mapRef.value.setView(latlng, mapRef.value._zoom)
 				onMoveEnd()
 			}
+			else if (e.target.className === 'search-button') {
+				const [dataRef, setData, extendParams] = useData()
+				const [uId, guildId] = [
+					_div.querySelector('input[name=uId]').value,
+					_div.querySelector('input[name=guildId]').value,
+				]
+
+				extendParams.value.uId = uId
+				extendParams.value.guildId = guildId
+				onMoveEnd()
+			}
+			L.DomEvent.stopPropagation(e)
+			L.DomEvent.preventDefault(e)
 		})
 		return _div
 	}

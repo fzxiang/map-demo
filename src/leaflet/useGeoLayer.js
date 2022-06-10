@@ -7,12 +7,13 @@ import useImageLayer from "./useImageLayer";
 
 const [config] = useConfig()
 const [info] = useInfoLayer()
-const [dataRef, setData] = useData()
+const [dataRef, setData, extendParams] = useData()
 const mapRef= ref(null)
 
 const geoLayerRef = ref(null)
 
 const [imgLayerRef] = useImageLayer()
+
 
 const options = {
 	style: (data) => {
@@ -21,12 +22,22 @@ const options = {
 		let fillColor = ''
 		let fillOpacity = .6
 		// 有分阵营角色颜色
-		color_type ?
-			fillColor = color_type_mapping[color_type] :
+		const hasExtend = !!(extendParams.value.uId || extendParams.value.guildId)
+
+		if (hasExtend) {
+			fillColor = color_type_mapping[color_type]
+		} else {
 			fillColor = COLOR[type]
-		if(type === 2) {
-			fillOpacity = level / 5
-		} else if (type === 0) {
+			if(type === 2 && color_type === 0) {
+				fillOpacity = level / 5
+			}
+			// 城墙
+			else if (type === 0) {
+				fillOpacity = .4
+			}
+		}
+		if (type === 0 ) {
+			fillColor = COLOR[type]
 			fillOpacity = .4
 		}
 		return {
