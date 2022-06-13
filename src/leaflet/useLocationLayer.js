@@ -3,8 +3,7 @@ import { reactive } from "vue";
 import userMapLayer from "./useMapLayer";
 import useConfig from "./useConfig";
 import useGeoLayer from "./useGeoLayer";
-
-import useData from "./useData";
+import { getMapApi } from "../api/map";
 
 export default function () {
 
@@ -33,7 +32,7 @@ export default function () {
 			<button class="location-button">跳转</button>
 		</div>
 `
-		L.DomEvent.on(_div, 'click', function (e) {
+		L.DomEvent.on(_div, 'click', async function (e) {
 
 			if (e.target.className === 'location-button') {
 				const pos = _div.querySelector('input[name=pos]').value.split(',')
@@ -52,6 +51,22 @@ export default function () {
 				]
 				localStore.value.UID = UID
 				localStore.value.GUILD_ID = GUILD_ID
+
+				// 根据UID 赋值坐标
+				const params = {
+					do: "getUserInfo",
+					server_id: 1
+				}
+				params.data = {
+					uId: UID
+				}
+				const { result } = await getMapApi(params)
+				if (result.pos) {
+					const latlng = L.latLng(result.pos[1], result.pos[0])
+					mapRef.value.setView(latlng, mapRef.value._zoom)
+					localStore.value.DEFAULT_POS = result.pos
+				}
+				console.log(result)
 				onMoveEnd()
 			}
 			L.DomEvent.stopPropagation(e)
