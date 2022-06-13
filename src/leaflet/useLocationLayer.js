@@ -22,6 +22,7 @@ export default function () {
 			<div class="form-item">
 				<div><label>UID：</label><input type="number" name="uId" value="${config.UID}"></div>
 				<div><label>联盟：</label><input type="number" name="guildId" value="${config.GUILD_ID}"></div>
+				<div><label>等级：</label><input type="text" name="level" placeholder="大于资源地等级" value="${config.LEVEL}"></div>
 			</div>
 			<button class="search-button">搜索</button>
 		</div>
@@ -45,28 +46,33 @@ export default function () {
 				onMoveEnd()
 			}
 			else if (e.target.className === 'search-button') {
-				const [UID, GUILD_ID] = [
+				const [UID, GUILD_ID, LEVEL] = [
 					_div.querySelector('input[name=uId]').value,
 					_div.querySelector('input[name=guildId]').value,
+					_div.querySelector('input[name=level]').value,
 				]
 				localStore.value.UID = UID
 				localStore.value.GUILD_ID = GUILD_ID
+				localStore.value.LEVEL = LEVEL
 
-				// 根据UID 赋值坐标
-				const params = {
-					do: "getUserInfo",
-					server_id: 1
+				if (UID) {
+					// 根据UID 赋值坐标
+					const params = {
+						do: "getUserInfo",
+						server_id: 1
+					}
+					params.data = {
+						uId: UID
+					}
+					const { result } = await getMapApi(params)
+					if (result.pos) {
+						//视图直接定位到改用户地块中心点
+						const latlng = L.latLng(result.pos[1], result.pos[0])
+						mapRef.value.setView(latlng, mapRef.value._zoom)
+						localStore.value.DEFAULT_POS = result.pos
+					}
 				}
-				params.data = {
-					uId: UID
-				}
-				const { result } = await getMapApi(params)
-				if (result.pos) {
-					//视图直接定位到改用户地块中心点
-					const latlng = L.latLng(result.pos[1], result.pos[0])
-					mapRef.value.setView(latlng, mapRef.value._zoom)
-					localStore.value.DEFAULT_POS = result.pos
-				}
+
 				onMoveEnd()
 			}
 			L.DomEvent.stopPropagation(e)

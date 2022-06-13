@@ -22,6 +22,7 @@ const setData = async ({ lat, lng, zoom, boxString }) => {
 		zoom,
 		uId: localStore.value.UID,
 		guildId: localStore.value.GUILD_ID,
+		resLevel: localStore.value.LEVEL,
 	}
 	const { result } = await getMapApi(params)
 	const json = pos2polygon(result)

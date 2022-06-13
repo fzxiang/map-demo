@@ -22,6 +22,7 @@ const config = {
 	DEFAULT_POS: localStore.value.DEFAULT_POS ? localStore.value.DEFAULT_POS : [50, 50],
 	UID: localStore.value.UID || "",
 	GUILD_ID: localStore.value.GUILD_ID || "",
+	LEVEL: localStore.value.LEVEL || "3",
 	MaxZoom: 7,
 	MinZoom: 5,
 	MaxWidth: 1000,
