@@ -7,9 +7,9 @@ import useImageLayer from "./useImageLayer";
 import { getMapApi } from "../api/map";
 import debounce from "lodash.debounce";
 
-const [config] = useConfig()
+const [config, setConfig, localStore] = useConfig()
 const [infoRef, update,  appendData ,infoLoading] = useInfoLayer()
-const [dataRef, setData, extendParams] = useData()
+const [dataRef, setData] = useData()
 const mapRef= ref(null)
 
 const geoLayerRef = ref(null)
@@ -19,12 +19,21 @@ const [imgLayerRef] = useImageLayer()
 
 const options = {
 	style: (data) => {
-		const { COLOR, color_type_mapping } = config
-		const { colour_type: color_type, type, level } = data.properties
+		const { COLOR, color_type_mapping, res_point_conf, building_conf } = config
+		const { colour_type: color_type, type, conf_id} = data.properties
+
+		// 资源和建筑等级读取配置表
+		let level = null
+		if (type === 1) {
+			level = building_conf[conf_id].level
+		}	else if (type === 2) {
+			level = res_point_conf[conf_id].level
+		}
+
 		let fillColor = ''
 		let fillOpacity = .6
 		// 有分阵营角色颜色
-		const hasExtend = !!(extendParams.value.uId || extendParams.value.guildId)
+		const hasExtend = !!(localStore.value.UID || localStore.value.GUILD_ID)
 
 		if (hasExtend) {
 			fillColor = color_type_mapping[color_type]
@@ -68,11 +77,27 @@ const options = {
 
 // 使用防抖器, 请求接口并加载地块其它信息
 let properties = null
-const loadOthers = debounce(async (properties)=>{
-	const res = await getMapApi({
-		do: 'getConfig'
-	})
-	infoLoading(false)
+const loadOthers = debounce(async ()=>{
+	try {
+		const [posX, posY] = properties.pos
+		const { result } = await getMapApi({
+			do: 'getTileInfo',
+			server_id: 1,
+			data: {
+				posX: posX,
+				posY: posY
+			}
+		})
+		if (result.owner.length!==0) {
+			appendData(result.owner)
+		}
+	}catch (e) {
+		console.error(e)
+	}finally {
+		infoLoading(false)
+	}
+
+
 }, 800)
 function highlightFeature(e) {
 	const layer = e.target;

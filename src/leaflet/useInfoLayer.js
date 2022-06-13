@@ -44,19 +44,12 @@ function infoLoading(bool) {
 
 function appendData (props) {
 	if (!props) return
-	const {
-		pos,
-		name,
-		owner,
-		type,
-	} = props
-	let str = `<h4>${TYPE[type]}</h4><b>位置信息: ${pos[0]},${pos[1]}</b>`
-	if (name) {
-		str += `<br>名称：${name}`
-	}
-	if (owner) {
-		str += `<br>拥有者：${owner}`
-	}
+	const { guild_id, guild_name, id, name } = props
+	let str = ''
+	guild_id && (str += '<br>联盟ID：' + guild_id)
+	guild_name && (str += '<br>联盟名称：' + guild_name)
+	id && (str += '<br>UID：' + id)
+	name && (str += '<br>拥有者：' + name)
 	infoRef.value._div.insertAdjacentHTML('beforeend', str)
 }
 export default () => [infoRef, update, appendData ,infoLoading]

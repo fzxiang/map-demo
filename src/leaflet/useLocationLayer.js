@@ -9,7 +9,7 @@ import useData from "./useData";
 export default function () {
 
 	const [mapRef] = userMapLayer()
-	const [{ TILE_NUM }] = useConfig()
+	const [config, setConfig, localStore] = useConfig()
 	const [geoLayerRef, onMoveEnd] = useGeoLayer()
 
 	const pos = reactive([0, 0])
@@ -17,42 +17,41 @@ export default function () {
 
 	locationLayer.onAdd = function (map) {
 		const _div = L.DomUtil.create('div')
+		const default_pos = config.DEFAULT_POS.join()
 		_div.innerHTML = `
 		<div class="location-layer">
 			<div class="form-item">
-				<div><label>UID：</label><input type="number" name="uId" value=""></div>
-				<div><label>联盟：</label><input type="number" name="guildId" value=""></div>
+				<div><label>UID：</label><input type="number" name="uId" value="${config.UID}"></div>
+				<div><label>联盟：</label><input type="number" name="guildId" value="${config.GUILD_ID}"></div>
 			</div>
 			<button class="search-button">搜索</button>
 		</div>
 		<div class="location-layer">
 			<div class="form-item">
-				<div><label>坐标：</label><input type="text" name="pos" value="0,0"></div>
+				<div><label>坐标：</label><input type="text" name="pos" value="${default_pos}"></div>
 			</div>
 			<button class="location-button">跳转</button>
 		</div>
 `
 		L.DomEvent.on(_div, 'click', function (e) {
+
 			if (e.target.className === 'location-button') {
 				const pos = _div.querySelector('input[name=pos]').value.split(',')
 				const x = pos[0] || 0
 				const y = pos[1] || 0
-				console.log(mapRef.value)
-				console.log(x, y)
 
 				const latlng = L.latLng(y, x)
 				mapRef.value.setView(latlng, mapRef.value._zoom)
+				localStore.value.DEFAULT_POS = [x,y]
 				onMoveEnd()
 			}
 			else if (e.target.className === 'search-button') {
-				const [dataRef, setData, extendParams] = useData()
-				const [uId, guildId] = [
+				const [UID, GUILD_ID] = [
 					_div.querySelector('input[name=uId]').value,
 					_div.querySelector('input[name=guildId]').value,
 				]
-
-				extendParams.value.uId = uId
-				extendParams.value.guildId = guildId
+				localStore.value.UID = UID
+				localStore.value.GUILD_ID = GUILD_ID
 				onMoveEnd()
 			}
 			L.DomEvent.stopPropagation(e)

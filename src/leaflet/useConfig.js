@@ -1,4 +1,12 @@
-const config =  {
+import { useLocalStorage } from "@vueuse/core";
+
+const localStore = useLocalStorage(
+	'game_map',
+	{},
+)
+
+
+const config = {
 	COLOR: {
 		0: 'rgb(0,0,0)',
 		1: 'rgb(241,229,187)',
@@ -11,7 +19,9 @@ const config =  {
 		2: '地块类型-资源点',
 		3: '地块类型-玩家主城',
 	},
-	TILE_NUM: 50,
+	DEFAULT_POS: localStore.value.DEFAULT_POS ? localStore.value.DEFAULT_POS : [50, 50],
+	UID: localStore.value.UID || "",
+	GUILD_ID: localStore.value.GUILD_ID || "",
 	MaxZoom: 7,
 	MinZoom: 5,
 	MaxWidth: 1000,
@@ -19,7 +29,7 @@ const config =  {
 	DEFAULT_ZOOM: 6
 }
 export default function useConfig() {
-	return [config, setConfig]
+	return [config, setConfig, localStore]
 }
 
 function setConfig(params) {
