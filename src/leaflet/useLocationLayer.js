@@ -62,11 +62,11 @@ export default function () {
 				}
 				const { result } = await getMapApi(params)
 				if (result.pos) {
+					//视图直接定位到改用户地块中心点
 					const latlng = L.latLng(result.pos[1], result.pos[0])
 					mapRef.value.setView(latlng, mapRef.value._zoom)
 					localStore.value.DEFAULT_POS = result.pos
 				}
-				console.log(result)
 				onMoveEnd()
 			}
 			L.DomEvent.stopPropagation(e)
