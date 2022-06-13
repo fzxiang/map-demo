@@ -69,8 +69,8 @@ const options = {
 
 	onEachFeature: (feature, layer) => {
 		layer.on({
-			mouseover: highlightFeature,
-			mouseout: resetHighlight
+			click: highlightFeature,
+			// dblClick: resetHighlight
 		})
 	}
 }
@@ -101,7 +101,7 @@ const loadOthers = debounce(async ()=>{
 }, 800)
 function highlightFeature(e) {
 	const layer = e.target;
-
+	geoLayerRef.value.resetStyle()
 	layer.setStyle({
 		weight: 3,
 		opacity: 1,
@@ -118,7 +118,7 @@ function highlightFeature(e) {
 
 function resetHighlight(e) {
 	geoLayerRef.value.resetStyle(e.target)
-	update()
+	// update() 10001064769
 }
 
 async function onMoveEnd(e) {
