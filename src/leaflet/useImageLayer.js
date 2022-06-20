@@ -4,7 +4,7 @@ import { ref } from "vue";
 const imgLayerRef = ref(null)
 
 const options = {
-	style: (data) => {
+	style: (data, layer) => {
 		const { icon, icon_type } = data.properties
 		return {
 			weight: 0,

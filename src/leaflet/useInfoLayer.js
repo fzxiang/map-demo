@@ -1,19 +1,20 @@
 // 信息层
-import * as L from "leaflet";
+import { DomEvent, DomUtil, control} from "leaflet";
+
 import { ref, unref } from "vue";
 
 const [{ TYPE }] = useConfig()
 import useConfig from "./useConfig";
 
-const infoRef = ref(L.control())
+const infoRef = ref(control())
 
 const copyValRef = ref('')
 infoRef.value.onAdd = function (map) {
-	const _div = L.DomUtil.create('div', 'info')
+	const _div = DomUtil.create('div', 'info')
 	update();
 	infoRef.value._div = _div
 
-	L.DomEvent.on(_div, 'click', async function (e) {
+	DomEvent.on(_div, 'click', async function (e) {
 		if (e.target.className === 'copy') {
 			var textarea = document.createElement('textarea');
 			document.body.appendChild(textarea);

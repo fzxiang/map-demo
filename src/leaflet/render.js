@@ -3,6 +3,7 @@ import useSearchLayer from "./useSearchLayer";
 import useLocationLayer from "./useLocationLayer";
 import useMapLayer from "./useMapLayer";
 import useImageLayer from "./useImageLayer";
+import useGeoLayer from "./useGeoLayer";
 import("./usePattern")
 export default async function (elem) {
 	const [mapRef, mapRender] = useMapLayer()
@@ -14,12 +15,12 @@ export default async function (elem) {
 	infoRef.value.addTo(map)
 
 	// GEO层 ps:搜索层中引入了geo
-	// const [geoLayerRef] = useGeoLayer()
-	// geoLayerRef.value.addTo(map)
+	const [geoLayerRef] = useGeoLayer()
+	geoLayerRef.value.addTo(map)
 
 	// 搜索层
-	const [controlSearch] = useSearchLayer()
-	map.addControl(controlSearch)
+	// const [controlSearch] = useSearchLayer()
+	// map.addControl(controlSearch)
 
 	// image
 	const [imgLayerRef] = useImageLayer()

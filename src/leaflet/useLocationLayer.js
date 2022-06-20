@@ -1,4 +1,5 @@
-import * as L from "leaflet";
+import { control, DomUtil, DomEvent, latLng} from "leaflet";
+
 import { reactive } from "vue";
 import userMapLayer from "./useMapLayer";
 import useConfig from "./useConfig";
@@ -12,10 +13,10 @@ export default function () {
 	const [geoLayerRef, onMoveEnd] = useGeoLayer()
 
 	const pos = reactive([0, 0])
-	const locationLayer = L.control({ position: 'bottomleft' })
+	const locationLayer = control({ position: 'bottomleft' })
 
 	locationLayer.onAdd = function (map) {
-		const _div = L.DomUtil.create('div')
+		const _div = DomUtil.create('div')
 		const default_pos = config.DEFAULT_POS.join()
 		_div.innerHTML = `
 		<div class="location-layer">
@@ -33,14 +34,14 @@ export default function () {
 			<button class="location-button">跳转</button>
 		</div>
 `
-		L.DomEvent.on(_div, 'click', async function (e) {
+		DomEvent.on(_div, 'click', async function (e) {
 
 			if (e.target.className === 'location-button') {
 				const pos = _div.querySelector('input[name=pos]').value.split(',')
 				const x = pos[0] || 0
 				const y = pos[1] || 0
 
-				const latlng = L.latLng(y, x)
+				const latlng = latLng(y, x)
 				mapRef.value.setView(latlng, mapRef.value._zoom)
 				localStore.value.DEFAULT_POS = [x,y]
 				onMoveEnd()
@@ -67,7 +68,7 @@ export default function () {
 					const { result } = await getMapApi(params)
 					if (result.pos) {
 						//视图直接定位到改用户地块中心点
-						const latlng = L.latLng(result.pos[1], result.pos[0])
+						const latlng = latLng(result.pos[1], result.pos[0])
 						mapRef.value.setView(latlng, mapRef.value._zoom)
 						localStore.value.DEFAULT_POS = result.pos
 					}
@@ -75,8 +76,8 @@ export default function () {
 
 				onMoveEnd()
 			}
-			L.DomEvent.stopPropagation(e)
-			L.DomEvent.preventDefault(e)
+			DomEvent.stopPropagation(e)
+			DomEvent.preventDefault(e)
 		})
 		return _div
 	}

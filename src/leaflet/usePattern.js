@@ -1,6 +1,6 @@
-import * as L from "leaflet";
+import { SVG } from "leaflet";
 
-L.SVG.include({
+SVG.include({
 	_updateStyle: function (layer) {
 		const path = layer._path
 		const	options = layer.options
@@ -49,7 +49,7 @@ L.SVG.include({
 		const path = layer._path
 		const options = layer.options
 		if (!this._defs) {
-			this._defs = L.SVG.create('defs');
+			this._defs = SVG.create('defs');
 			this._container.appendChild(this._defs);
 		}
 		const _img_url = options.fill.substring(4, options.fill.length - 1);
@@ -66,7 +66,7 @@ L.SVG.include({
 			const _im = new Image();
 			_im.src = _img_url;
 
-			_p = L.SVG.create('pattern');
+			_p = SVG.create('pattern');
 			_p.setAttribute('id', _ref_id);
 			_p.setAttribute('x', 0);
 			_p.setAttribute('y', 0);
@@ -77,7 +77,7 @@ L.SVG.include({
 			this._defs.appendChild(_p);
 
 			// const
-			const _img = L.SVG.create('image');
+			const _img = SVG.create('image');
 			_img.setAttribute('x', '0');
 			_img.setAttribute('y', '0');
 			_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', _img_url);

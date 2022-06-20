@@ -1,4 +1,4 @@
-import * as L from "leaflet";
+import { map, CRS, latLng, latLngBounds} from "leaflet";
 import useConfig from "./useConfig";
 import { ref } from "vue";
 import { getMapApi } from "../api/map";
@@ -26,15 +26,14 @@ async function renderMap (elem) {
 	}
 
 	const { DEFAULT_POS, MaxZoom, MinZoom, MaxHeight, MaxWidth, DEFAULT_ZOOM } = config
-	const corner1 = L.latLng(0,  0)
-	const corner2 = L.latLng(MaxHeight, MaxWidth)
-	mapRef.value = L
-		.map(elem, {
+	const corner1 = latLng(0,  0)
+	const corner2 = latLng(MaxHeight, MaxWidth)
+	mapRef.value = map(elem, {
 			// preferCanvas: true,
 			doubleClickZoom: false,
-			crs: L.CRS.Simple, // 简单坐标系
+			crs: CRS.Simple, // 简单坐标系
 			attributionControl: false,
-			maxBounds: L.latLngBounds(corner1, corner2)
+			maxBounds: latLngBounds(corner1, corner2)
 		})
 		.setView([DEFAULT_POS[1], DEFAULT_POS[0]], DEFAULT_ZOOM)
 		.setMaxZoom(MaxZoom)

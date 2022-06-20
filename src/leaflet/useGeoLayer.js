@@ -1,4 +1,4 @@
-import * as L from 'leaflet'
+import { DomUtil, geoJSON } from 'leaflet'
 import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
@@ -126,7 +126,7 @@ async function onMoveEnd(e) {
 		if(e.type === 'zoomend') {
 			// 放大缩小是 清除图片<defs>
 			console.log(e.type)
-			L.DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
+			DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
 		}
 	}
 	const _map = mapRef.value;
@@ -154,7 +154,7 @@ async function onMoveEnd(e) {
 	imgLayerRef.value.addData(data)
 }
 
-const geoJSONLayer = L.geoJSON(undefined, options)
+const geoJSONLayer = geoJSON(undefined, options)
 geoJSONLayer.onAdd = async (map) => {
 	mapRef.value = map
 	await onMoveEnd()
