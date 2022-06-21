@@ -9,7 +9,7 @@ import { getMapApi } from "../api/map";
 export default function () {
 
 	const [mapRef] = userMapLayer()
-	const [config, setConfig, localStore] = useConfig()
+	const [config, setConfig] = useConfig()
 	const [geoLayerRef, onMoveEnd] = useGeoLayer()
 
 	const pos = reactive([0, 0])
@@ -43,7 +43,9 @@ export default function () {
 
 				const latlng = latLng(y, x)
 				mapRef.value.setView(latlng, mapRef.value._zoom)
-				localStore.value.DEFAULT_POS = [x,y]
+				setConfig({
+					DEFAULT_POS: [x,y],
+				})
 				onMoveEnd()
 			}
 			else if (e.target.className === 'search-button') {
@@ -52,9 +54,12 @@ export default function () {
 					_div.querySelector('input[name=guildId]').value,
 					_div.querySelector('input[name=level]').value,
 				]
-				localStore.value.UID = UID
-				localStore.value.GUILD_ID = GUILD_ID
-				localStore.value.LEVEL = LEVEL
+
+				setConfig({
+					UID,
+					GUILD_ID,
+					LEVEL
+				})
 
 				if (UID) {
 					// 根据UID 赋值坐标
@@ -70,7 +75,9 @@ export default function () {
 						//视图直接定位到改用户地块中心点
 						const latlng = latLng(result.pos[1], result.pos[0])
 						mapRef.value.setView(latlng, mapRef.value._zoom)
-						localStore.value.DEFAULT_POS = result.pos
+						setConfig({
+							DEFAULT_POS: result.pos,
+						})
 					}
 				}
 

@@ -5,7 +5,7 @@ import { pos2polygon } from "../utils/datafilter";
 import useConfig from "./useConfig";
 
 const dataRef = ref([])
-const [config, setConfig, localStore] = useConfig()
+const [config] = useConfig()
 const setData = async ({ lat, lng, zoom, boxString }) => {
 	const [x0, y0, x1, y1] = boxString.split(',')
 	const w = parseInt(x1 - x0 + 15 + "")
@@ -20,9 +20,9 @@ const setData = async ({ lat, lng, zoom, boxString }) => {
 		lengthX: w,
 		lengthY: h,
 		zoom,
-		uId: localStore.value.UID,
-		guildId: localStore.value.GUILD_ID,
-		resLevel: localStore.value.LEVEL,
+		uId: config.UID,
+		guildId: config.GUILD_ID,
+		resLevel: config.LEVEL,
 	}
 	const { result } = await getMapApi(params)
 	const json = pos2polygon(result)

@@ -35,4 +35,12 @@ export default function useConfig() {
 
 function setConfig(params) {
 	Object.assign(config, params)
+	if (params.DEFAULT_POS)
+		localStore.value.DEFAULT_POS = params.DEFAULT_POS
+	if (params.UID)
+		localStore.value.UID = params.UID
+	if (params.GUILD_ID)
+		localStore.value.GUILD_ID = params.GUILD_ID
+	if (params.LEVEL)
+		localStore.value.LEVEL = params.LEVEL
 }

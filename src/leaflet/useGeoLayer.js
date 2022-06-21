@@ -7,7 +7,7 @@ import useImageLayer from "./useImageLayer";
 import { getMapApi } from "../api/map";
 import debounce from "lodash.debounce";
 
-const [config, setConfig, localStore] = useConfig()
+const [config] = useConfig()
 const [infoRef, update,  appendData ,infoLoading] = useInfoLayer()
 const [dataRef, setData] = useData()
 const mapRef= ref(null)
@@ -33,7 +33,7 @@ const options = {
 		let fillColor = ''
 		let fillOpacity = .6
 		// 有分阵营角色颜色
-		const hasExtend = !!(localStore.value.UID || localStore.value.GUILD_ID)
+		const hasExtend = !!(config.UID || config.GUILD_ID)
 
 		if (hasExtend) {
 			fillColor = color_type_mapping[color_type]
