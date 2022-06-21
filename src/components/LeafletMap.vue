@@ -43,7 +43,7 @@ onMounted(async () => {
   /*align-items: center;*/
   overflow: hidden;
 }
-@media(min-width: 1920px) {
+@media(min-width: 1921px) {
   .container{
     width: 1440px;
     height: 900px
