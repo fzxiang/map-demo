@@ -10,3 +10,10 @@ export const getMapApi = (params) => {
 	})
 }
 
+export const getMapFile = () => {
+	return fetch('/api/mapFile', {
+
+	}).then(response => {
+		return response.arrayBuffer()
+	})
+}

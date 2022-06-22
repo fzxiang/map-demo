@@ -30,7 +30,7 @@ const config = {
 	DEFAULT_ZOOM: 6
 }
 export default function useConfig() {
-	return [config, setConfig, localStore]
+	return [config, setConfig]
 }
 
 function setConfig(params) {

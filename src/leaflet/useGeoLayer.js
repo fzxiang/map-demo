@@ -3,14 +3,16 @@ import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useData from "./useData";
+import useBasicData from "./useBasicData";
 import useImageLayer from "./useImageLayer";
 import { getMapApi } from "../api/map";
 import debounce from "lodash.debounce";
 
 const [config] = useConfig()
-const [infoRef, update,  appendData ,infoLoading] = useInfoLayer()
+const [infoRef, update, appendData, infoLoading] = useInfoLayer()
 const [dataRef, setData] = useData()
-const mapRef= ref(null)
+const [basicDataRef, setBasicData] = useBasicData()
+const mapRef = ref(null)
 
 const geoLayerRef = ref(null)
 
@@ -20,13 +22,13 @@ const [imgLayerRef] = useImageLayer()
 const options = {
 	style: (data) => {
 		const { COLOR, color_type_mapping, res_point_conf, building_conf } = config
-		const { colour_type: color_type, type, conf_id} = data.properties
+		const { colour_type: color_type, type, conf_id } = data.properties
 
 		// 资源和建筑等级读取配置表
 		let level = null
 		if (type === 1) {
 			level = building_conf[conf_id].level
-		}	else if (type === 2) {
+		} else if (type === 2) {
 			level = res_point_conf[conf_id].level
 		}
 
@@ -39,7 +41,7 @@ const options = {
 			fillColor = color_type_mapping[color_type]
 		} else {
 			fillColor = COLOR[type]
-			if(type === 2 && color_type === 0) {
+			if (type === 2 && color_type === 0) {
 				fillOpacity = level / 5
 			}
 			// 城墙
@@ -47,7 +49,7 @@ const options = {
 				fillOpacity = .4
 			}
 		}
-		if (type === 0 ) {
+		if (type === 0) {
 			fillColor = COLOR[type]
 			fillOpacity = .4
 		}
@@ -77,7 +79,7 @@ const options = {
 
 // 使用防抖器, 请求接口并加载地块其它信息
 let properties = null
-const loadOthers = debounce(async ()=>{
+const loadOthers = debounce(async () => {
 	try {
 		const [posX, posY] = properties.pos
 		const { result } = await getMapApi({
@@ -88,17 +90,18 @@ const loadOthers = debounce(async ()=>{
 				posY: posY
 			}
 		})
-		if (result.owner.length!==0) {
+		if (result.owner.length !== 0) {
 			appendData(result.owner)
 		}
-	}catch (e) {
+	} catch (e) {
 		console.error(e)
-	}finally {
+	} finally {
 		infoLoading(false)
 	}
 
 
 }, 800)
+
 function highlightFeature(e) {
 	const layer = e.target;
 	geoLayerRef.value.resetStyle()
@@ -123,7 +126,7 @@ function resetHighlight(e) {
 
 async function onMoveEnd(e) {
 	if (e) {
-		if(e.type === 'zoomend') {
+		if (e.type === 'zoomend') {
 			// 放大缩小是 清除图片<defs>
 			console.log(e.type)
 			DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
@@ -132,9 +135,17 @@ async function onMoveEnd(e) {
 	const _map = mapRef.value;
 	const bounds = _map.getBounds();
 	const boxString = bounds.toBBoxString()
-	const zoom =  _map.getZoom();
+	const zoom = _map.getZoom();
 	const { lat, lng } = bounds.getCenter()
 	console.log('数据变化前')
+	// 获取地图基础数据
+	await setBasicData({
+		lat,
+		lng,
+		zoom,
+		boxString,
+	})
+
 	await setData({
 		lat,
 		lng,
@@ -162,7 +173,6 @@ geoJSONLayer.onAdd = async (map) => {
 	map.on('zoomend', onMoveEnd, this);
 	map.on('refresh', onMoveEnd, this);
 }
-
 
 
 geoLayerRef.value = geoJSONLayer

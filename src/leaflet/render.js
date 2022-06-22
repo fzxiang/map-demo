@@ -6,8 +6,8 @@ import useImageLayer from "./useImageLayer";
 import useGeoLayer from "./useGeoLayer";
 import("./usePattern")
 export default async function (elem) {
-	const [mapRef, mapRender] = useMapLayer()
-	await mapRender(elem)
+	const [mapRef, renderMap] = useMapLayer()
+	await renderMap(elem)
 	const map = mapRef.value
 
 	// 信息层
