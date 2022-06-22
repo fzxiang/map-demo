@@ -7,17 +7,17 @@ export default class MapDataManager {
 	static #MASK_BLOCK = 0x8000			// 2个字节最高位是阻挡标识
 	static #MASK_STATE_ID = 0x7000	// 13～15位，州ID
 	static #MASK_BIND_ID = 0x0FFF		// 1～12位，地块绑定ID
-	#mapData = {}						// key:pos, value: 16bit value
+	#mapData = []						// key:pos, value: 16bit value
 	#city = {}								// key:pos, value: city conf id
 	#initOnce = false
 
 	constructor(params) {
 	}
 
-	static getInstance(){
+	static async getInstance(){
 		if (!MapDataManager.#instance) {
 			MapDataManager.#instance = new MapDataManager()
-			MapDataManager.#instance.initOnce().then(r => {})
+			await MapDataManager.#instance.initOnce()
 		}
 		return MapDataManager.#instance
 	}
@@ -43,7 +43,7 @@ export default class MapDataManager {
 		let blockByte = 0			// 地块位数据
 		let blockBinary = ""	// 地块字节数据
 		for (let i = 0; i < len; i+=2) {
-			value = (file[i] << 8) + file[i+1]
+			value = this.getBlockData(file, i)
 
 			// 存入地图数据
 			this.#mapData[index] = value
@@ -87,8 +87,8 @@ export default class MapDataManager {
 
 
 	// 是否阻断
-	isBlock(pos) {
-		const value = this.#mapData[pos] || -1
+	isBlock(index) {
+		const value = this.#mapData[index] || -1
 		if ( value === -1 ) {
 			return true
 		}
@@ -96,14 +96,14 @@ export default class MapDataManager {
 	}
 
 	// 获取tile绑定ID(无效返回-1)
-	getTileBindId(pos) {
-		const value = this.#mapData[pos] || -1
+	getTileBindId(index) {
+		const value = this.#mapData[index] || -1
 		if (value === -1 ) {
 			return -1
 		}
 
 		// 动态阻挡点(如大型城池)，地图数据标志为阻挡
-		if((value & MapDataManager.#MASK_BIND_ID) > 0 ) {
+		if((value & MapDataManager.#MASK_BLOCK) > 0 ) {
 			const bindId = (value & MapDataManager.#MASK_BIND_ID)
 			if (bindId > 0) {
 				return bindId
@@ -111,7 +111,73 @@ export default class MapDataManager {
 			return -1
 		}
 
-		return value
+		return value & MapDataManager.#MASK_BIND_ID
+	}
+
+	// 通过下标获取地块id
+	getConfigId(index) {
+		const bindId = this.getTileBindId(index)
+		if (bindId === -1) {
+			return false
+		}
+		const conf = config.map_server_tile_conf[bindId]
+		return conf['configId']
+	}
+
+	// 通过下标判断是否资源点
+	isResTile(x, y) {
+		const index = this.getTileIndex(x,y)
+		const bindId = this.getTileBindId(index)
+		if (bindId === -1) {
+			return false
+		}
+		const conf = config.map_server_tile_conf[bindId]
+		// 资源点类型为2
+		return conf.type === 2
+	}
+
+	getCity() {
+		return this.#city
+	}
+
+	// 是否城池地块
+	isCityTile(x, y) {
+		const index = this.getTileIndex(x,y)
+		const bindId = this.getTileBindId(index)
+		if (bindId === -1) {
+			return false
+		}
+		const conf = config.map_server_tile_conf[bindId]
+		return conf.type === 1
+	}
+
+		getBlockData (file, idx) {
+			let c = file[idx + 0]
+			const value = String.fromCharCode(c)
+			// 第一个字符
+			c = file[idx + 1 ]
+			return ((value << 8) + String.fromCharCode(c))
+		}
+	// 通过下标获取城池地块资源
+	getCityId(index) {
+		const bindId = this.getTileBindId(index)
+		if (bindId === -1) {
+			return false
+		}
+		const conf = config.map_server_tile_conf[bindId]
+		if (conf.type !== 1 ) {
+			return -1
+		}
+		return conf['configId']
+	}
+
+	getMapData() {
+		return this.#mapData
+	}
+
+	// 通过位置获取地图数据下标
+	getTileIndex(x, y) {
+		return (y * config.MaxWidth + x)
 	}
 
 }
