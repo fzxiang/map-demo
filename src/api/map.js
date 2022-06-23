@@ -25,3 +25,10 @@ export const getMapConfigApi = () => {
 		return response.json()
 	})
 }
+
+export const getMapUserInfoApi = (params) => {
+	return fetch('/api/mapUserInfo?' + new URLSearchParams(params))
+		.then(response => {
+			return response.json()
+		})
+}

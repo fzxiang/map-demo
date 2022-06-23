@@ -4,7 +4,7 @@ import { reactive } from "vue";
 import userMapLayer from "./useMapLayer";
 import useConfig from "./useConfig";
 import useGeoLayer from "./useGeoLayer";
-import { getMapApi } from "../api/map";
+import { getMapUserInfoApi } from "../api/map";
 
 export default function () {
 
@@ -64,13 +64,12 @@ export default function () {
 				if (UID) {
 					// 根据UID 赋值坐标
 					const params = {
-						do: "getUserInfo",
-						server_id: 1
-					}
-					params.data = {
+						// do: "getUserInfo",
+						server_id: 1,
 						uId: UID
+
 					}
-					const { result } = await getMapApi(params)
+					const result = await getMapUserInfoApi(params)
 					if (result.pos) {
 						//视图直接定位到改用户地块中心点
 						const latlng = latLng(result.pos[1], result.pos[0])
