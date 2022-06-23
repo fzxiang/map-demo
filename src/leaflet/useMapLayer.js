@@ -1,14 +1,14 @@
 import { map, CRS, latLng, latLngBounds} from "leaflet";
 import useConfig from "./useConfig";
 import { ref } from "vue";
-import { getMapApi } from "../api/map";
+import { getMapConfigApi } from "../api/map";
 
 const [config , setConfig] = useConfig()
 const mapRef = ref(null)
 
 async function renderMap (elem) {
 	try {
-		const { result } = await getMapApi({
+		const result = await getMapConfigApi({
 			do: "getConfig",
 		})
 		const { colour_type_mapping, building_conf, res_point_conf, map_info } = result
