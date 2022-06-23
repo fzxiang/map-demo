@@ -1,4 +1,4 @@
-import { map, CRS, latLng, latLngBounds} from "leaflet";
+import { map, CRS, latLng, latLngBounds, svg } from "leaflet";
 import useConfig from "./useConfig";
 import { ref } from "vue";
 import { getMapConfigApi } from "../api/map";
@@ -33,7 +33,8 @@ async function renderMap (elem) {
 			doubleClickZoom: false,
 			crs: CRS.Simple, // 简单坐标系
 			attributionControl: false,
-			maxBounds: latLngBounds(corner1, corner2)
+			maxBounds: latLngBounds(corner1, corner2),
+			renderer: svg({ padding: .8 })
 		})
 		.setView([DEFAULT_POS[1], DEFAULT_POS[0]], DEFAULT_ZOOM)
 		.setMaxZoom(MaxZoom)

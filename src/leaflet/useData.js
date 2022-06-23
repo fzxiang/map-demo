@@ -8,8 +8,8 @@ const dataRef = ref([])
 const [config, setConfig, localStore] = useConfig()
 const setData = async ({ lat, lng, zoom, boxString }) => {
 	const [x0, y0, x1, y1] = boxString.split(',')
-	const w = parseInt(x1 - x0 + 15 + "")
-	const h = parseInt(y1 - y0 + 10 + "")
+	const w = parseInt(x1 - x0 + 60 + "")
+	const h = parseInt(y1 - y0 + 50 + "")
 
 	const params = {
 		do: 'getMapList'
