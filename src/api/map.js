@@ -17,3 +17,11 @@ export const getMapFile = () => {
 		return response.arrayBuffer()
 	})
 }
+
+export const getMapConfigApi = () => {
+	return fetch('/api/mapConfig', {
+		method: 'GET',
+	}).then(response => {
+		return response.json()
+	})
+}

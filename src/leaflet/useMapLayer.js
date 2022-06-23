@@ -1,15 +1,14 @@
 import { map, CRS, latLng, latLngBounds} from "leaflet";
 import useConfig from "./useConfig";
 import { ref } from "vue";
-import { getMapApi, getMapFile } from "../api/map";
+import { getMapConfigApi, getMapFile } from "../api/map";
 
 const [config , setConfig] = useConfig()
 const mapRef = ref(null)
 
 async function init() {
 	try {
-		// 初始化 获取配置表数据
-		const { result } = await getMapApi({
+		const result = await getMapConfigApi({
 			do: "getConfig",
 		})
 		const { colour_type_mapping, building_conf, map_server_tile_conf, res_point_conf, map_info } = result
