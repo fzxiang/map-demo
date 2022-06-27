@@ -11,7 +11,7 @@ async function init() {
 		const result = await getMapConfigApi({
 			do: "getConfig",
 		})
-		const { colour_type_mapping, building_conf, map_server_tile_conf, res_point_conf, map_info } = result
+		const { colour_type_mapping, building_conf, building_shape_conf, map_server_tile_conf, res_point_conf, map_info } = result
 		const { map_height, map_width } = map_info
 		// 写入配置数据
 		setConfig({
@@ -20,7 +20,8 @@ async function init() {
 			color_type_mapping: colour_type_mapping,
 			building_conf,
 			res_point_conf,
-			map_server_tile_conf
+			map_server_tile_conf,
+			building_shape_conf,
 		})
 	} catch (e) {
 		console.log(e)
@@ -44,7 +45,7 @@ async function renderMap (elem) {
 		.setView([DEFAULT_POS[1], DEFAULT_POS[0]], DEFAULT_ZOOM)
 		.setMaxZoom(MaxZoom)
 		.setMinZoom(MinZoom)
-		.on('dragend', ()=>console.log('drag'))
+		.on('dragend', ()=>console.log('--------drag--------'))
 }
 export default () => [mapRef, renderMap]
 

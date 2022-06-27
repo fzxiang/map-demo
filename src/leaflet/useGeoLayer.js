@@ -3,14 +3,14 @@ import { ref } from "vue";
 import useConfig from "./useConfig";
 import useInfoLayer from "./useInfoLayer";
 import useData from "./useData";
-import useBasicData from "./useBasicData";
 import useImageLayer from "./useImageLayer";
 import { getMapApi } from "../api/map";
 import debounce from "lodash.debounce";
+import useBasicData from "./useBasicData";
 
 const [config] = useConfig()
 const [infoRef, update, appendData, infoLoading] = useInfoLayer()
-const [dataRef, setData] = useData()
+// const [dataRef, setData] = useData()
 const [basicDataRef, setBasicData] = useBasicData()
 const mapRef = ref(null)
 
@@ -21,25 +21,18 @@ const [imgLayerRef] = useImageLayer()
 
 const options = {
 	style: (data) => {
-		const { COLOR, color_type_mapping, res_point_conf, building_conf } = config
-		const { colour_type: color_type, type, conf_id } = data.properties
+		const { COLOR, color_type_mapping } = config
+		const { colour_type: color_type, type, level, zoom } = data.properties
 
-		// 资源和建筑等级读取配置表
-		let level = null
-		if (type === 1) {
-			level = building_conf[conf_id].level
-		} else if (type === 2) {
-			level = res_point_conf[conf_id].level
-		}
-
-		let fillColor = ''
-		let fillOpacity = .6
+		let fillColor = '#ddd'
+		let fillOpacity = 1
 		// 有分阵营角色颜色
 		const hasExtend = !!(config.UID || config.GUILD_ID)
 
 		if (hasExtend) {
-			fillColor = color_type_mapping[color_type]
-		} else {
+			// fillColor = color_type_mapping[color_type]
+		}
+		else {
 			fillColor = COLOR[type]
 			if (type === 2 && color_type === 0) {
 				fillOpacity = level / 5
@@ -57,8 +50,8 @@ const options = {
 			fillColor,
 			fillOpacity,
 			// dashArray: '5',
-			weight: 1,
-			color: 'white'
+			weight: 2**zoom / 16,
+			color: '#ccc'
 		};
 	},
 	// filter: (feature, layer) => {
@@ -106,9 +99,8 @@ function highlightFeature(e) {
 	const layer = e.target;
 	geoLayerRef.value.resetStyle()
 	layer.setStyle({
-		weight: 3,
 		opacity: 1,
-		color: '#f8be00',
+		color: '#11f800',
 		fillColor: '#f8be00',
 		fillOpacity: .6
 	});
@@ -116,7 +108,6 @@ function highlightFeature(e) {
 	update(layer.feature.properties);
 	infoLoading(true)
 	loadOthers()
-
 }
 
 function resetHighlight(e) {
@@ -124,21 +115,20 @@ function resetHighlight(e) {
 	// update() 10001064769
 }
 
+// 视图拖动事件
 async function onMoveEnd(e) {
-	if (e) {
-		if (e.type === 'zoomend') {
-			// 放大缩小是 清除图片<defs>
-			console.log(e.type)
-			DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
-		}
-	}
+	// 放大缩小是 清除图片<defs>
+	if (e)
+		if (e.type === 'zoomend')
+			if (e.target._container.querySelector('defs'))
+				DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
 	const _map = mapRef.value;
 	const bounds = _map.getBounds();
 	const boxString = bounds.toBBoxString()
 	const zoom = _map.getZoom();
 	const { lat, lng } = bounds.getCenter()
 	console.log('数据变化前')
-	// 获取地图基础数据
+	// 前端处理基础地图数据
 	await setBasicData({
 		lat,
 		lng,
@@ -146,14 +136,7 @@ async function onMoveEnd(e) {
 		boxString,
 	})
 
-	await setData({
-		lat,
-		lng,
-		zoom,
-		boxString,
-	})
-
-	let data = dataRef.value
+	let data = basicDataRef.value
 
 	geoLayerRef.value.clearLayers();//if needed, we clean the layers
 

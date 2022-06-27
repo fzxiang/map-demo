@@ -124,9 +124,51 @@ export default class MapDataManager {
 		return conf['configId']
 	}
 
+	// 获取资源点配置表信息
+	getResPointConf(index) {
+		const configId = this.getConfigId(index)
+		if (configId === -1) {
+			return {}
+		}
+		return config.res_point_conf[configId]
+	}
+
+	// 获取建筑配置表信息
+	getBuildConf(index) {
+		const configId = this.getConfigId(index)
+		if (configId === -1) {
+			return {}
+		}
+		return config.building_conf[configId]
+	}
+
+	// 获取建筑形状配置表
+	getBuildShape(index) {
+		const configId = this.getConfigId(index)
+		if (configId === -1) {
+			return {}
+		}
+		const shapeId = config?.building_conf?.[configId]?.shapeId
+		if (shapeId < 0) {
+			return {}
+		}
+		return config?.building_shape_conf?.[shapeId]
+	}
+
+	getResShape(index) {
+		const configId = this.getConfigId(index)
+		if (configId === -1) {
+			return {}
+		}
+		const shapeId = config?.res_point_conf?.[configId]?.shapeId
+		if (shapeId < 0) {
+			return {}
+		}
+		return config?.building_shape_conf?.[shapeId]
+	}
+
 	// 通过下标判断是否资源点
-	isResTile(x, y) {
-		const index = this.getTileIndex(x,y)
+	isResTile(index) {
 		const bindId = this.getTileBindId(index)
 		if (bindId === -1) {
 			return false
@@ -141,8 +183,7 @@ export default class MapDataManager {
 	}
 
 	// 是否城池地块
-	isCityTile(x, y) {
-		const index = this.getTileIndex(x,y)
+	isCityTile(index) {
 		const bindId = this.getTileBindId(index)
 		if (bindId === -1) {
 			return false
@@ -151,13 +192,12 @@ export default class MapDataManager {
 		return conf.type === 1
 	}
 
-		getBlockData (file, idx) {
-			let c = file[idx + 0]
-			const value = String.fromCharCode(c)
-			// 第一个字符
-			c = file[idx + 1 ]
-			return ((value << 8) + String.fromCharCode(c))
-		}
+	getBlockData (file, idx) {
+		let value1 = file[idx + 0]
+		let value2 = file[idx + 1 ]
+		return ((value1 << 8) + value2)
+	}
+
 	// 通过下标获取城池地块资源
 	getCityId(index) {
 		const bindId = this.getTileBindId(index)

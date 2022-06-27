@@ -3,8 +3,8 @@ import { DomEvent, DomUtil, control} from "leaflet";
 
 import { ref, unref } from "vue";
 
-const [{ TYPE }] = useConfig()
 import useConfig from "./useConfig";
+const [{ TYPE }] = useConfig()
 
 const infoRef = ref(control())
 
@@ -34,28 +34,16 @@ infoRef.value.onAdd = function (map) {
 	})
 	return _div
 }
-const [config] = useConfig()
 
 function update (props) {
 	if (!props) return
 	const {
 		pos,
 		type,
-		conf_id,
+		level,
 	} = props
 	let str = `<h4>${TYPE[type]}</h4><b>位置信息: ${pos[0]},${pos[1]}</b>`
 
-	// 资源和建筑等级读取配置表
-	const { res_point_conf, building_conf } = config
-
-	let level = null
-	if (type === 1) {
-		level = building_conf[conf_id].level
-	}	else if (type === 2) {
-		level = res_point_conf[conf_id].level
-	}
-
-	console.log(props)
 	if (level) {
 		str += `<br>等级：${level}`
 	}
