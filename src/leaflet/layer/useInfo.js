@@ -3,7 +3,7 @@ import { DomEvent, DomUtil, control} from "leaflet";
 
 import { ref, unref } from "vue";
 
-import useConfig from "./useConfig";
+import useConfig from "../useConfig";
 const [{ TYPE }] = useConfig()
 
 const infoRef = ref(control())

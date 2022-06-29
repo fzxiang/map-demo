@@ -1,7 +1,6 @@
 @import "leaflet/dist/leaflet.css";
 @import "./infoLayer.less";
 @import "./locationLayer.less";
-@import "leaflet-search/dist/leaflet-search.min.css";
 
 // 样式覆盖
 .leaflet-control-search .search-input {
@@ -12,3 +11,17 @@
   pointer-events: none!important;
 }
 
+// div icon
+.my-div-icon {
+  position: relative;
+}
+.my-div-icon:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: #f8be00 dashed 3px;
+}

@@ -1,10 +1,10 @@
 import { control, DomUtil, DomEvent, latLng} from "leaflet";
 
 import { reactive } from "vue";
-import userMapLayer from "./useMapLayer";
-import useConfig from "./useConfig";
-import useGeoLayer from "./useGeoLayer";
-import { getMapUserInfoApi } from "../api/map";
+import userMapLayer from "./useMap";
+import useConfig from "../useConfig";
+import useGeoLayer from "./useGeoJSON";
+import { getMapUserInfoApi } from "../../api/map";
 
 export default function () {
 

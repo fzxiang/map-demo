@@ -1,7 +1,7 @@
-import { map, CRS, latLng, latLngBounds, svg } from "leaflet";
-import useConfig from "./useConfig";
+import { map, CRS, latLng, latLngBounds, svg, canvas } from "leaflet";
+import useConfig from "../useConfig";
 import { ref } from "vue";
-import { getMapConfigApi, getMapFile } from "../api/map";
+import { getMapConfigApi, getMapFile } from "../../api/map";
 
 const [config , setConfig] = useConfig()
 const mapRef = ref(null)

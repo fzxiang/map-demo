@@ -1,12 +1,12 @@
-import { DomUtil, geoJSON } from 'leaflet'
+import { DomUtil, geoJSON, DomEvent } from "leaflet"
 import { ref } from "vue";
-import useConfig from "./useConfig";
-import useInfoLayer from "./useInfoLayer";
-import useData from "./useData";
-import useImageLayer from "./useImageLayer";
-import { getMapApi } from "../api/map";
+import useConfig from "../useConfig";
+import useInfoLayer from "./useInfo";
+import useData from "../useData";
+import useImageLayer from "./useImage";
+import { getMapApi } from "../../api/map";
 import debounce from "lodash.debounce";
-import useBasicData from "./useBasicData";
+import useBasicData from "../useBasicData";
 
 const [config] = useConfig()
 const [infoRef, update, appendData, infoLoading] = useInfoLayer()
@@ -96,6 +96,7 @@ const loadOthers = debounce(async () => {
 }, 800)
 
 function highlightFeature(e) {
+	DomEvent.stopPropagation(e);
 	const layer = e.target;
 	geoLayerRef.value.resetStyle()
 	layer.setStyle({
@@ -116,7 +117,7 @@ function resetHighlight(e) {
 }
 
 // 视图拖动事件
-async function onMoveEnd(e) {
+const onMoveEnd = debounce(async (e) => {
 	// 放大缩小是 清除图片<defs>
 	if (e)
 		if (e.type === 'zoomend')
@@ -144,14 +145,17 @@ async function onMoveEnd(e) {
 	geoLayerRef.value.addData(data);
 
 	// image
-	imgLayerRef.value.clearLayers()
-	imgLayerRef.value.addData(data)
-}
+	// imgLayerRef.value.clearLayers()
+	// imgLayerRef.value.addData(data)
+}, 500)
+// async function onMoveEnd(e) {
+//
+// }
 
 const geoJSONLayer = geoJSON(undefined, options)
 geoJSONLayer.onAdd = async (map) => {
 	mapRef.value = map
-	await onMoveEnd()
+	onMoveEnd()
 	map.on('dragend', onMoveEnd, this);
 	map.on('zoomend', onMoveEnd, this);
 	map.on('refresh', onMoveEnd, this);

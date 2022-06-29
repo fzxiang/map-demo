@@ -38,7 +38,7 @@ export function drawPolygon(item, options = {}) {
 		_h = 'shape[1]',
 		_x = 'pos[0]',
 		_y = 'pos[1]',
-		margin = .05,//相邻地块间距
+		margin = .04,//相邻地块间距
 	} = options
 
 	const offset_x = (get(item, _w) || 1)/2 - margin

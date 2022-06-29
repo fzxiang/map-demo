@@ -1,4 +1,4 @@
-import * as L from 'leaflet'
+import { geoJSON } from 'leaflet'
 import { ref } from "vue";
 
 const imgLayerRef = ref(null)
@@ -25,7 +25,7 @@ const options = {
 
 }
 
-imgLayerRef.value = L.geoJSON(undefined, options)
+imgLayerRef.value = geoJSON(undefined, options)
 
 console.log(imgLayerRef.value)
 export default () => [imgLayerRef]

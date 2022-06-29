@@ -1,12 +1,12 @@
-import * as L from "leaflet";
+import { Control } from "leaflet";
 import * as LS from 'leaflet-search'
-import useGeoLayer from "./useGeoLayer";
+import useGeoLayer from "./useGeoJSON";
 
 export default function () {
 	const [geoLayerRef] = useGeoLayer()
 	const geoLayer = geoLayerRef.value
 	// 搜索层
-	const controlSearch = new L.Control.Search({
+	const controlSearch = new Control.Search({
 		position:'topleft',
 		layer: geoLayer,
 		initial: false,
