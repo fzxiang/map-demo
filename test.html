@@ -3,26 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="">
 </head>
 <body>
-<div>
-  <input type="file" id="file">
+<div style="width: 800px; height: 400px" id="app">
+
 </div>
 
-<script>
-	var input  = document.getElementById("file"); //input file
-	input.onchange = function(){
-		var file = this.files[0];
-		if(!!file){
-			//读取本地文件，以gbk编码方式输出
-			var reader = new FileReader();
-			reader.readAsText(file,"gbk");
-			reader.onload = function(){
-				//读取完毕后输出结果
-				console.log(this.result);
-			}
-		}
-	}
+<script type="module">
+  import { svg, canvas, map, CRS, polygon, geoJSON } from 'leaflet'
+
+  import('leaflet/')
+  const svgIns = svg({ padding: .8 })
+  var mymap = map('app', {
+		crs: CRS.Simple,
+		attributionControl: false,
+    renderer: svgIns
+  })
+    .setView([1, 1], 6)
+
+	const polygonIns = geoJSON([], {
+		style: (data, layer) => {
+			// console.log(data, layer)
+    }
+  })
+
+	console.log(svgIns)
+	polygonIns.onAdd = (m) => {
+		// console.log(m)
+    polygonIns.addData({
+      type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							// 1,1
+							[
+								[0, 1],
+								[1, .5],
+								[2, 1],
+								[1, 1.5]
+							],
+						]
+					}
+				},
+		// {
+		// 	type: 'Feature',
+		// 	geometry: {
+		// 		type: 'Polygon',
+		// 		coordinates:[
+		// 			// 2,1
+		// 			[
+		// 				[1, 1],
+		// 				[2, .5],
+		// 				[3, 1],
+		// 				[2, 1.5]
+		// 			],
+		// 		]
+		// 	}
+		// },
+	]
+	})
+  }
+
+
+	polygonIns.addTo(mymap);
 </script>
 </body>
 </html>

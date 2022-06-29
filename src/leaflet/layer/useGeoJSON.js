@@ -144,9 +144,10 @@ const onMoveEnd = debounce(async (e) => {
 	//Then we add the new data
 	geoLayerRef.value.addData(data);
 
+	console.log(data)
 	// image
-	// imgLayerRef.value.clearLayers()
-	// imgLayerRef.value.addData(data)
+	imgLayerRef.value.clearLayers()
+	imgLayerRef.value.addData(data)
 }, 500)
 // async function onMoveEnd(e) {
 //

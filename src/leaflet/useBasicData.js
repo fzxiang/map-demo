@@ -71,13 +71,17 @@ const setBasicData = async ({ lat, lng, zoom, boxString }) => {
 			if (instance.isCityTile(idx)) {
 				// console.log('建筑坐标点：', i, j)
 				obj[uni].type = 1
+				const buildConf = instance.getBuildConf(idx)
 				// obj[uni].conf_id = instance.getConfigId(idx)
-				obj[uni].level = instance.getBuildConf(idx)?.level
+				obj[uni].level = buildConf?.level
+				obj[uni].icon = buildConf?.id
+				obj[uni].icon_type = 'png'
 				obj[uni].shape = instance.getBuildShape(idx)?.shape
 			}
 			// 是否资源地块
 			else if (instance.isResTile(idx)) {
-				const level = instance.getResPointConf(idx)?.level
+				const resPointConf = instance.getResPointConf(idx)
+				const level = resPointConf?.level
 				if(!level) {
 					delete obj[uni]
 					continue
@@ -85,6 +89,8 @@ const setBasicData = async ({ lat, lng, zoom, boxString }) => {
 				obj[uni].type = 2
 				// obj[uni].conf_id = instance.getConfigId(idx)
 				obj[uni].level = level
+				obj[uni].icon = resPointConf?.id
+				obj[uni].icon_type = 'png'
 				obj[uni].shape = instance.getResShape(idx)?.shape
 			}
 			// 是否阻挡点
