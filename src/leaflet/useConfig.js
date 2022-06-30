@@ -9,9 +9,9 @@ const localStore = useLocalStorage(
 const config = {
 	COLOR: {
 		0: 'rgb(0,0,0)',
-		1: 'rgb(241,229,187)',
+		1: 'rgb(221,221,221)',
 		2: 'rgb(221,221,221)',
-		3: 'rgb(230,131,63)'
+		3: 'rgb(221,221,221)'
 	},
 	TYPE: {
 		0: '阻挡点',
@@ -27,7 +27,8 @@ const config = {
 	MinZoom: 5,
 	MaxWidth: 1000,
 	MaxHeight: 1000,
-	DEFAULT_ZOOM: 6
+	DEFAULT_ZOOM: 6,
+	Offset: .6
 }
 export default function useConfig() {
 	return [config, setConfig]

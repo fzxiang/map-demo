@@ -6,12 +6,10 @@ import useData from "../useData";
 import useImageLayer from "./useImage";
 import { getMapApi } from "../../api/map";
 import debounce from "lodash.debounce";
-import useBasicData from "../useBasicData";
 
 const [config] = useConfig()
 const [infoRef, update, appendData, infoLoading] = useInfoLayer()
-// const [dataRef, setData] = useData()
-const [basicDataRef, setBasicData] = useBasicData()
+const [dataRef, setData] = useData()
 const mapRef = ref(null)
 
 const geoLayerRef = ref(null)
@@ -30,7 +28,8 @@ const options = {
 		const hasExtend = !!(config.UID || config.GUILD_ID)
 
 		if (hasExtend) {
-			// fillColor = color_type_mapping[color_type]
+			if (color_type_mapping[color_type])
+				fillColor = color_type_mapping[color_type]
 		}
 		else {
 			fillColor = COLOR[type]
@@ -50,8 +49,8 @@ const options = {
 			fillColor,
 			fillOpacity,
 			// dashArray: '5',
-			weight: 2**zoom / 16,
-			color: '#ccc'
+			weight: 1,
+			color: '#fff'
 		};
 	},
 	// filter: (feature, layer) => {
@@ -101,10 +100,13 @@ function highlightFeature(e) {
 	geoLayerRef.value.resetStyle()
 	layer.setStyle({
 		opacity: 1,
-		color: '#11f800',
+		color: '#f8a100',
+		weight: 3,
 		fillColor: '#f8be00',
 		fillOpacity: .6
 	});
+	layer.bringToFront()
+	imgLayerRef.value.bringToFront()
 	properties = layer.feature.properties
 	update(layer.feature.properties);
 	infoLoading(true)
@@ -130,28 +132,25 @@ const onMoveEnd = debounce(async (e) => {
 	const { lat, lng } = bounds.getCenter()
 	console.log('数据变化前')
 	// 前端处理基础地图数据
-	await setBasicData({
+	await setData({
 		lat,
 		lng,
 		zoom,
 		boxString,
 	})
 
-	let data = basicDataRef.value
+	let data = dataRef.value
 
 	geoLayerRef.value.clearLayers();//if needed, we clean the layers
 
 	//Then we add the new data
 	geoLayerRef.value.addData(data);
 
-	console.log(data)
 	// image
 	imgLayerRef.value.clearLayers()
 	imgLayerRef.value.addData(data)
 }, 500)
-// async function onMoveEnd(e) {
-//
-// }
+
 
 const geoJSONLayer = geoJSON(undefined, options)
 geoJSONLayer.onAdd = async (map) => {

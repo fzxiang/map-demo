@@ -9,7 +9,7 @@ const options = {
 		return {
 			weight: 0,
 			fillOpacity: 1,
-			fill: `url(/icon/${icon}.${icon_type})`,
+			fill: `url(/icon/${icon}.png)`,
 			className: 'pointer-none',
 		};
 	},

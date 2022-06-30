@@ -3,24 +3,18 @@ import MapDataManager from "./MapDataManager";
 
 import GeoJSON from "geojson";
 import { pos2polygon, drawPolygon  } from "../utils/datafilter";
+import useConfig from "./useConfig";
 
+
+
+const [config]  = useConfig()
 const basicMapDataRef = ref({})
 
-const setBasicData = async ({ lat, lng, zoom, boxString }) => {
+const setBasicData = async ({ zoom,x0,y0,x1,y1, boxString }) => {
 	const instance = await MapDataManager.getInstance()
 
 	// 通过参数 返回指定区块地图数据
 	const obj = {}
-	let [x0, y0, x1, y1] = boxString.split(',')
-	// 数据偏移量
-	const offset = (10-zoom)*1.4
-	// 根据视图缩放程度 获取不同程度 数据
-	const offSetX = parseInt(offset*2 + "")
-	const offSetY = parseInt(offset + "")
-	x0 = parseInt(+x0 - offSetX + "")
-	y0 = parseInt(+y0 - offSetY + "")
-	x1 = parseInt(+x1 + offSetX + "")
-	y1 = parseInt(+y1 + offSetY + "")
 
 	console.log('实例：', instance)
 	console.log('坐标信息：', x0, y0, x1, y1)
@@ -82,7 +76,7 @@ const setBasicData = async ({ lat, lng, zoom, boxString }) => {
 			else if (instance.isResTile(idx)) {
 				const resPointConf = instance.getResPointConf(idx)
 				const level = resPointConf?.level
-				if(!level) {
+				if(level < config.LEVEL) {
 					delete obj[uni]
 					continue
 				}
@@ -106,15 +100,15 @@ const setBasicData = async ({ lat, lng, zoom, boxString }) => {
 	}
 
 	// 这里遍历返回map 对象 用于后面处理数据合并
+	basicMapDataRef.value = obj
 
-
-	const json = GeoJSON.parse(Object.values(obj), {
-		Polygon: 'Polygon'
-	})
-
+	// const json = GeoJSON.parse(Object.values(obj), {
+	// 	Polygon: 'Polygon'
+	// })
+	//
+	// basicMapDataRef.value = json
 	console.timeEnd('地块生成')
 
-	basicMapDataRef.value = json
 }
 
 export default () => [basicMapDataRef, setBasicData]
