@@ -6,6 +6,7 @@ import useData from "../useData";
 import useImageLayer from "./useImage";
 import { getMapApi } from "../../api/map";
 import debounce from "lodash.debounce";
+import useMarker from "./useMarker";
 
 const [config] = useConfig()
 const [infoRef, update, appendData, infoLoading] = useInfoLayer()
@@ -16,6 +17,7 @@ const geoLayerRef = ref(null)
 
 const [imgLayerRef] = useImageLayer()
 
+const [markerRef, setMarker] = useMarker()
 
 const options = {
 	style: (data) => {
@@ -123,6 +125,13 @@ const onMoveEnd = debounce(async (e) => {
 	// 放大缩小是 清除图片<defs>
 	if (e){
 		if (e.type === 'zoomend'){
+			// 更改marker层 icon 尺寸
+			markerRef.value.remove()
+			const iconSize = 2**e.target._zoom
+			setMarker({
+				iconSize: [iconSize, iconSize]
+			})
+
 			const imgElems = e.target._container.querySelectorAll('defs image')
 			// 更改资源图 宽高
 			imgElems.forEach(item => {
@@ -131,6 +140,9 @@ const onMoveEnd = debounce(async (e) => {
 				item.setAttribute('width', 2**e.target._zoom*w)
 				item.setAttribute('height', 2**e.target._zoom*h)
 			})
+
+
+
 		}
 	}
 	// 		if (e.target._container.querySelector('defs'))

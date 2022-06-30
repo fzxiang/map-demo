@@ -1,14 +1,9 @@
 import { ref } from 'vue'
-import { divIcon, marker } from "leaflet";
+import { divIcon, latLng, marker } from "leaflet";
+import userMapLayer from "./useMap";
 
 const markerLayer = ref(null)
-// markerLayer.value = ref(marker([0,0], {
-// 	icon: divIcon({
-// 		className: 'my-div-icon',
-// 		iconSize: [64,64],
-// 	})
-// }))
-
+const [mapRef] = userMapLayer()
 const setMarker = (options) => {
 	const { iconSize } = options
 	markerLayer.value = marker([244,105], {
@@ -17,6 +12,7 @@ const setMarker = (options) => {
 			iconSize,
 		})
 	})
+	markerLayer.value.addTo(mapRef.value)
 }
 
 

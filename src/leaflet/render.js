@@ -39,28 +39,13 @@ export default async function (elem) {
 	setMarker({
 		iconSize: [64, 64]
 	})
-	console.log(markerLayer.value)
-	markerLayer.value.addTo(map)
-	// const divIconIns = divIcon({
-	// 	className: 'my-div-icon',
-	// 	iconSize: [64,64],
-	// })
-	// const markerLayer = marker([0,0], {
-	// 	icon: divIconIns
-	// })
-	map.on('click', (e, layer) => {
-		const iconSize = 2**e.target._zoom
 
-		setMarker({
-			iconSize: [iconSize, iconSize]
-		})
-		// markerLayer.options.icon.options.iconSize = [iconSize, iconSize]
+	map.on('click', (e, layer) => {
 		let { lat, lng } = e.latlng
 		lat = lat.toFixed()
 		lng = lng.toFixed()
 		markerLayer.value.setLatLng(latLng(lat,lng))
 		markerLayer.value.bindTooltip(`空地位置坐标: ${lng}, ${lat}` ).openTooltip()
-
 	})
 
 
