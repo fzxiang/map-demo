@@ -54,13 +54,10 @@ SVG.include({
 		}
 		const _img_url = options.fill.substring(4, options.fill.length - 1);
 		const _ref_id = _img_url.match(/(\d+)/)[1];
-		let multiple = 1
-		if (_ref_id == 0 || _ref_id > 4000) {
-			multiple = 3
-		}
+		const [w, h] = layer.feature.properties.shape
+
 		let _p = document.getElementById(_ref_id);
 		const zoom = this._zoom
-		const rect = 2**zoom * multiple
 
 		if (!_p) {
 			const _im = new Image();
@@ -81,8 +78,10 @@ SVG.include({
 			_img.setAttribute('x', '0');
 			_img.setAttribute('y', '0');
 			_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', _img_url);
-			_img.setAttribute('width', rect);
-			_img.setAttribute('height', rect);
+			_img.setAttribute('width',  2**zoom*w);
+			_img.setAttribute('height', 2**zoom*h);
+			_img.setAttribute('w', w);
+			_img.setAttribute('h', h);
 			_p.appendChild(_img);
 
 			_im.onload = function() {

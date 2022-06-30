@@ -121,10 +121,20 @@ function resetHighlight(e) {
 // 视图拖动事件
 const onMoveEnd = debounce(async (e) => {
 	// 放大缩小是 清除图片<defs>
-	if (e)
-		if (e.type === 'zoomend')
-			if (e.target._container.querySelector('defs'))
-				DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
+	if (e){
+		if (e.type === 'zoomend'){
+			const imgElems = e.target._container.querySelectorAll('defs image')
+			// 更改资源图 宽高
+			imgElems.forEach(item => {
+				const w = item.getAttribute('w')
+				const h = item.getAttribute('h')
+				item.setAttribute('width', 2**e.target._zoom*w)
+				item.setAttribute('height', 2**e.target._zoom*h)
+			})
+		}
+	}
+	// 		if (e.target._container.querySelector('defs'))
+	// 			// DomUtil.empty(e.target._container.querySelectorAll('defs')[0])
 	const _map = mapRef.value;
 	const bounds = _map.getBounds();
 	const boxString = bounds.toBBoxString()
@@ -149,7 +159,7 @@ const onMoveEnd = debounce(async (e) => {
 	// image
 	imgLayerRef.value.clearLayers()
 	imgLayerRef.value.addData(data)
-}, 500)
+}, 150)
 
 
 const geoJSONLayer = geoJSON(undefined, options)
