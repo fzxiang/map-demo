@@ -1,14 +1,14 @@
 import { control, DomUtil, DomEvent, latLng} from "leaflet";
 
 import { reactive } from "vue";
-import userMapLayer from "./useMap";
+import useMapLayer from "./useMap";
 import useConfig from "../useConfig";
 import useGeoLayer from "./useGeoJSON";
 import { getMapUserInfoApi, getMapUserNameApi, getMapGuildsApi } from "../../api/map";
 
 export default function () {
 
-	const [mapRef] = userMapLayer()
+	const [mapRef] = useMapLayer()
 	const [config, setConfig] = useConfig()
 	const [geoLayerRef, onMoveEnd] = useGeoLayer()
 
