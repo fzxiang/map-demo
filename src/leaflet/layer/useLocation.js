@@ -4,7 +4,7 @@ import { reactive } from "vue";
 import userMapLayer from "./useMap";
 import useConfig from "../useConfig";
 import useGeoLayer from "./useGeoJSON";
-import { getMapUserInfoApi } from "../../api/map";
+import { getMapUserInfoApi, getMapUserNameApi, getMapGuildsApi } from "../../api/map";
 
 export default function () {
 
@@ -25,9 +25,11 @@ export default function () {
 		<div class="location-layer-collapsed"><button class="collapsed_btn">▼</button></div>
 		<div class="location-layer collapsed" data-collapsed="open">
 			<div class="form-item">
-				<div><label>UID：</label><input type="number" name="uId" value="${config.UID}"></div>
-				<div><label>联盟：</label><input type="number" name="guildId" value="${config.GUILD_ID}"></div>
-				<div><label>等级：</label><input type="text" name="level" placeholder="大于资源地等级" value="${config.LEVEL}"></div>
+				<div><label>用户名</label><input type="text" name="user" value="${config.USER}"></div>
+				<div><label>UID</label><input type="number" name="uId" value="${config.UID}"></div>
+				<div><label>联盟名</label><input type="text" name="guilds" value="${config.GUILDS}"></div>
+				<div><label>联盟ID</label><input type="number" name="guildId" value="${config.GUILD_ID}"></div>
+				<div><label>等级</label><input type="text" name="level" placeholder="大于资源地等级" value="${config.LEVEL}"></div>
 			</div>
 			<button class="search-button">搜索</button>
 		</div>
@@ -53,36 +55,66 @@ export default function () {
 				onMoveEnd()
 			}
 			else if (e.target.className === 'search-button') {
-				const [UID, GUILD_ID, LEVEL] = [
+				let [USER, GUILDS, UID, GUILD_ID, LEVEL] = [
+					_div.querySelector('input[name=user]').value,
+					_div.querySelector('input[name=guilds]').value,
 					_div.querySelector('input[name=uId]').value,
 					_div.querySelector('input[name=guildId]').value,
 					_div.querySelector('input[name=level]').value,
 				]
 
+				if (USER) {
+					const params = {
+						// do: "getUserInfo",
+						server_id: 1,
+						find_user: USER
+					}
+					const { uId } = await getMapUserNameApi(params)
+					_div.querySelector('input[name=uId]').value = uId
+					UID = uId
+				}
+				else if (GUILDS) {
+					const params = {
+						server_id: 1,
+					}
+					const guilds = await getMapGuildsApi(params)
+					const guild_id = guilds.find(item => item.guild_name === GUILDS)?.guild_id
+					if (guild_id) {
+						_div.querySelector('input[name=guildId]').value = guild_id
+						GUILDS = guild_id
+					} else {
+						_div.querySelector('input[name=guildId]').value = ""
+						GUILDS = ''
+					}
+				}
+				const params = {
+					server_id: 1,
+				}
+				if (UID) {
+					// 根据UID 赋值坐标
+					params.uId = UID
+				}
+				else if (GUILD_ID) {
+					params.guildId = GUILD_ID
+
+				}
+				const result = await getMapUserInfoApi(params)
+				if (result.pos) {
+					//视图直接定位到改用户地块中心点
+					const latlng = latLng(result.pos[1], result.pos[0])
+					mapRef.value.setView(latlng, mapRef.value._zoom)
+					setConfig({
+						DEFAULT_POS: result.pos,
+					})
+				}
+
 				setConfig({
+					USER,
+					GUILDS,
 					UID,
 					GUILD_ID,
 					LEVEL
 				})
-
-				if (UID) {
-					// 根据UID 赋值坐标
-					const params = {
-						// do: "getUserInfo",
-						server_id: 1,
-						uId: UID
-
-					}
-					const result = await getMapUserInfoApi(params)
-					if (result.pos) {
-						//视图直接定位到改用户地块中心点
-						const latlng = latLng(result.pos[1], result.pos[0])
-						mapRef.value.setView(latlng, mapRef.value._zoom)
-						setConfig({
-							DEFAULT_POS: result.pos,
-						})
-					}
-				}
 
 				onMoveEnd()
 			}

@@ -32,3 +32,17 @@ export const getMapUserInfoApi = (params) => {
 			return response.json()
 		})
 }
+
+export const getMapUserNameApi = (params) => {
+	return fetch('/api/mapUser?' + new URLSearchParams(params))
+		.then(response => {
+			return response.json()
+		})
+}
+
+export const getMapGuildsApi = (params) => {
+	return fetch('/api/mapGuilds?' + new URLSearchParams(params))
+		.then(response => {
+			return response.json()
+		})
+}

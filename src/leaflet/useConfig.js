@@ -22,6 +22,8 @@ const config = {
 	DEFAULT_POS: localStore.value.DEFAULT_POS ? localStore.value.DEFAULT_POS : [50, 50],
 	UID: localStore.value.UID || "",
 	GUILD_ID: localStore.value.GUILD_ID || "",
+	USER: localStore.value.USER || "",
+	GUILDS: localStore.value.GUILDS || "",
 	LEVEL: localStore.value.LEVEL || "3",
 	MaxZoom: 7,
 	MinZoom: 5,
@@ -40,6 +42,10 @@ function setConfig(params) {
 		localStore.value.DEFAULT_POS = params.DEFAULT_POS
 	if (params.UID)
 		localStore.value.UID = params.UID
+	if (params.USER)
+		localStore.value.USER = params.USER
+	if (params.GUILDS)
+		localStore.value.GUILDS = params.GUILDS
 	if (params.GUILD_ID)
 		localStore.value.GUILD_ID = params.GUILD_ID
 	if (params.LEVEL)
