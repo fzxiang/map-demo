@@ -5,6 +5,7 @@
   background: white;
   background: rgba(255, 255, 255, 0.8);
   //box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  transition: max-height .2s, opacity .2s;
   border-radius: 5px;
 }
 
@@ -27,4 +28,23 @@
 .location-layer .form-item label {
   width: 60px;
   display: inline-block;
+}
+
+.location-layer , .location-layer-collapsed  {
+  margin-bottom: 10px;
+}
+
+.location-layer.collapsed[data-collapsed=close] {
+  max-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+.location-layer.collapsed[data-collapsed=open] {
+  max-height: 100px;
+  opacity: 1;
+}
+.collapsed_btn {
+  color: #333333;
 }

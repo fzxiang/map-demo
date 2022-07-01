@@ -13,13 +13,17 @@ export default function () {
 	const [geoLayerRef, onMoveEnd] = useGeoLayer()
 
 	const pos = reactive([0, 0])
-	const locationLayer = control({ position: 'bottomleft' })
+	const locationLayer = control.layers({
+		collapsed: true
+	}).setPosition('bottomleft')
 
 	locationLayer.onAdd = function (map) {
 		const _div = DomUtil.create('div')
+		DomEvent.disableClickPropagation(_div)
 		const default_pos = config.DEFAULT_POS.join()
 		_div.innerHTML = `
-		<div class="location-layer">
+		<div class="location-layer-collapsed"><button class="collapsed_btn">▼</button></div>
+		<div class="location-layer collapsed" data-collapsed="open">
 			<div class="form-item">
 				<div><label>UID：</label><input type="number" name="uId" value="${config.UID}"></div>
 				<div><label>联盟：</label><input type="number" name="guildId" value="${config.GUILD_ID}"></div>
@@ -81,6 +85,16 @@ export default function () {
 				}
 
 				onMoveEnd()
+			}
+			else if (e.target.className === 'collapsed_btn' ) {
+				const collapsedElem = _div.querySelector('.collapsed')
+				if (collapsedElem.dataset.collapsed === 'open') {
+					collapsedElem.dataset.collapsed = 'close'
+					e.target.innerHTML =  '▲ '
+				} else {
+					collapsedElem.dataset.collapsed = 'open'
+					e.target.innerHTML =  '▼'
+				}
 			}
 			DomEvent.stopPropagation(e)
 			DomEvent.preventDefault(e)

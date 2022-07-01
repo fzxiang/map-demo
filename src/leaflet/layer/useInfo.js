@@ -14,6 +14,8 @@ infoRef.value.onAdd = function (map) {
 	update();
 	infoRef.value._div = _div
 
+	DomEvent.disableClickPropagation(_div)
+
 	DomEvent.on(_div, 'click', async function (e) {
 		if (e.target.className === 'copy') {
 			var textarea = document.createElement('textarea');
@@ -68,8 +70,8 @@ function appendData (props) {
 	const { guild_id, guild_name, id, name, captor_guild_id, captor_guild_name } = props
 	let str = ''
 	copyValRef.value = id
-	id && (str += '<br>UID：' + id + ' <button class="copy">复制</button>')
-	name && (str += '<br>拥有者：' + name)
+	id && (str += `<br>UID：<span> ${id} </span><button class="copy">复制</button> `) // <button class="copy">复制</button>
+	name && (str += `<br>拥有者：<span> ${name} </span>`)
 	guild_id && (str += '<br>联盟ID：' + guild_id)
 	guild_name && (str += '<br>联盟名称：' + guild_name)
 	captor_guild_id && (str += '<br>俘虏同盟Id：' + captor_guild_id)
