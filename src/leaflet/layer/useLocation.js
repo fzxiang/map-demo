@@ -90,15 +90,16 @@ export default function () {
 				const params = {
 					server_id: 1,
 				}
+				let result = {}
 				if (UID) {
 					// 根据UID 赋值坐标
 					params.uId = UID
+					result = await getMapUserInfoApi(params)
 				}
 				else if (GUILD_ID) {
 					params.guildId = GUILD_ID
-
+					result = await getMapUserInfoApi(params)
 				}
-				const result = await getMapUserInfoApi(params)
 				if (result.pos) {
 					//视图直接定位到改用户地块中心点
 					const latlng = latLng(result.pos[1], result.pos[0])
