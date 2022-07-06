@@ -1,4 +1,5 @@
 import { SVG } from "leaflet";
+import { getURL } from "../utils";
 
 SVG.include({
 	_updateStyle: function (layer) {
@@ -61,7 +62,7 @@ SVG.include({
 
 		if (!_p) {
 			const _im = new Image();
-			_im.src = _img_url;
+			_im.src = getURL(_img_url);
 
 			_p = SVG.create('pattern');
 			_p.setAttribute('id', _ref_id);
@@ -77,7 +78,7 @@ SVG.include({
 			const _img = SVG.create('image');
 			_img.setAttribute('x', '0');
 			_img.setAttribute('y', '0');
-			_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', _img_url);
+			_img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', getURL(_img_url));
 			_img.setAttribute('width',  2**zoom*w);
 			_img.setAttribute('height', 2**zoom*h);
 			_img.setAttribute('w', w);

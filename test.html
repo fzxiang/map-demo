@@ -3,73 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="">
 </head>
 <body>
-<div style="width: 800px; height: 400px" id="app">
+<div>
+  <svg height="900px" width="1000px" viewBox="208 -74 1000 900" style="transform: translate3d(208px, -74px, 0px);">
+    <path class="leaflet-interactive" stroke="black" stroke-opacity="1" stroke-width="1" stroke-linecap="round"
+          stroke-linejoin="round" fill="url(#103)"  fill-opacity="1" fill-rule="evenodd"
+          d="M695 692L759 692L759 628L695 628z"></path>
 
+    <defs>
+      <pattern id="103" x="0" y="0" patternUnits="objectBoundingBox" width="1" height="1">
+        <image x="0" y="0" xlink:href="/icon/103.png" width="64" height="64"></image>
+      </pattern>
+
+    </defs>
+  </svg>
 </div>
-
-<script type="module">
-  import { svg, canvas, map, CRS, polygon, geoJSON } from 'leaflet'
-
-  import('leaflet/')
-  const svgIns = svg({ padding: .8 })
-  var mymap = map('app', {
-		crs: CRS.Simple,
-		attributionControl: false,
-    renderer: svgIns
-  })
-    .setView([1, 1], 6)
-
-	const polygonIns = geoJSON([], {
-		style: (data, layer) => {
-			// console.log(data, layer)
-    }
-  })
-
-	console.log(svgIns)
-	polygonIns.onAdd = (m) => {
-		// console.log(m)
-    polygonIns.addData({
-      type: 'FeatureCollection',
-			features: [
-				{
-					type: 'Feature',
-					geometry: {
-						type: 'Polygon',
-						coordinates: [
-							// 1,1
-							[
-								[0, 1],
-								[1, .5],
-								[2, 1],
-								[1, 1.5]
-							],
-						]
-					}
-				},
-		// {
-		// 	type: 'Feature',
-		// 	geometry: {
-		// 		type: 'Polygon',
-		// 		coordinates:[
-		// 			// 2,1
-		// 			[
-		// 				[1, 1],
-		// 				[2, .5],
-		// 				[3, 1],
-		// 				[2, 1.5]
-		// 			],
-		// 		]
-		// 	}
-		// },
-	]
-	})
-  }
-
-
-	polygonIns.addTo(mymap);
-</script>
 </body>
 </html>

@@ -16,8 +16,14 @@ export default ({ command }) => {
     server: {
       host: true,
       proxy: createProxy(VITE_PROXY),
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			}
     },
     plugins: createVitePlugins(viteEnv, isBuild),
+		build: {
+			sourcemap: true
+		},
 		css: {
 			preprocessorOptions: {
 				less: {

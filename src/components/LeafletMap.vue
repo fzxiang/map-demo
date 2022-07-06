@@ -26,11 +26,11 @@ onMounted(async () => {
   bottom: 0;
   text-align: center;
 }
-@media(min-width: 1680px) {
-  .wrapper{
-    padding: 100px 200px;
-  }
-}
+/*@media(min-width: 1680px) {*/
+/*  .wrapper{*/
+/*    padding: 100px 200px;*/
+/*  }*/
+/*}*/
 
 
 
