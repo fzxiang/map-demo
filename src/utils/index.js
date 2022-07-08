@@ -1,3 +1,4 @@
 export function getURL(url) {
-	return new URL(url, import.meta.url).href
+	const __dynamic_base__ = window.__dynamic_base__? window.__dynamic_base__ : location.origin
+	return new URL(url, __dynamic_base__).href
 }

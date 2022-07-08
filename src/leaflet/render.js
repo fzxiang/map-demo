@@ -7,8 +7,9 @@ import useImageLayer from "./layer/useImage";
 import useGeoLayer from "./layer/useGeoJSON";
 import useMarkerLayer from "./layer/useMarker";
 
-import("./usePattern")
+import usePattern from "./usePattern";
 export default async function (elem) {
+	usePattern()
 	const [mapRef, renderMap] = useMapLayer()
 	await renderMap(elem)
 	const map = mapRef.value
